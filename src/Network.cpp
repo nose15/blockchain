@@ -9,15 +9,25 @@ Network::Network()
     std::cout << "Network established" << std::endl;
 }
 
-void Network::add_node(const std::string& nodeId, Node& node)
+void Network::sendMessage(const std::string& senderId, const std::string& receiverId, const std::string& message)
 {
-    std::pair<std::string, Node&> map_entry(nodeId, node);
-    this->m_nodes.insert(map_entry);
-    node.setNetwork(*this);
+    std::pair<std::string, std::string> messagePair(senderId, message);
+    std::pair<std::string, std::pair<std::string, std::string>> trafficPair(receiverId, messagePair);
+    this->current_traffic = trafficPair;
+    this->triggerTraffic();
 }
 
-void Network::send(std::string senderId, std::string receiverId, std::string message)
+void Network::triggerTraffic()
 {
-    Node& receiverNode = m_nodes.find(receiverId)->second;
-    receiverNode.triggerReceive(message);
+    for (const auto& handlerPair : connected) {
+        if (current_traffic.first == handlerPair.first)
+        {
+            handlerPair.second();
+        }
+    }
+}
+
+void Network::connect(std::string nodeId, const std::function<void()>& handler) {
+    std::pair<std::string, std::function<void()>> handlerPair(nodeId, handler);
+    connected.insert(handlerPair);
 }

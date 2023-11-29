@@ -5,8 +5,9 @@
 #include <string>
 #include <map>
 #include <iostream>
-
-#include "Node.h"
+#include <list>
+#include <iostream>
+#include <functional>
 
 #ifndef BLOCKCHAIN_NETWORK_H
 #define BLOCKCHAIN_NETWORK_H
@@ -14,11 +15,13 @@
 class Network
 {
 private:
-    std::map<std::string, Node&> m_nodes;
+    std::pair<std::string, std::pair<std::string, std::string>> current_traffic;
+    std::map<std::string, std::function<void()>> connected;
+    void triggerTraffic();
 public:
     Network();
-    void add_node(const std::string&, Node&);
-    void send(std::string, std::string, std::string);
+    void sendMessage(const std::string&, const std::string&, const std::string&);
+    void connect(std::string, const std::function<void()>&);
 };
 
 
