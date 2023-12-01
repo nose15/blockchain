@@ -8,6 +8,7 @@
 #include <list>
 #include <iostream>
 #include <functional>
+#include <stack>
 
 #ifndef BLOCKCHAIN_NETWORK_H
 #define BLOCKCHAIN_NETWORK_H
@@ -17,11 +18,15 @@ class Network
 private:
     std::pair<std::string, std::pair<std::string, std::string>> current_traffic;
     std::map<std::string, std::function<void()>> connected;
+    std::stack<std::string> availableIps;
+
     void triggerTraffic();
+    std::string acquireIp();
 public:
     Network();
     void sendMessage(const std::string&, const std::string&, const std::string&);
-    void connect(std::string, const std::function<void()>&);
+    std::string connect(const std::function<void()>&);
+    void disconnect(const std::string&);
 };
 
 

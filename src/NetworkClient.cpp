@@ -10,13 +10,13 @@
 
 NetworkClient::NetworkClient(std::string nodeId, Network * network) : nodeId(nodeId), network(network)
 {
-    network->connect(this->nodeId, [this] { trafficHandler(); });
+    this->ipAddress = network->connect([this] { trafficHandler(); });
     std::cout << "NetworkClient for " << this->nodeId << " established" << std::endl;
 }
 
-void NetworkClient::sendMessage(std::string receiverId, std::string message)
+void NetworkClient::sendMessage(std::string receiverIp, std::string message)
 {
-    network->sendMessage(this->nodeId, receiverId, message);
+    network->sendMessage(this->ipAddress, receiverIp, message);
 }
 
 void NetworkClient::trafficHandler()

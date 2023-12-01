@@ -7,15 +7,18 @@
 Network::Network()
 {
     std::cout << "Network established" << std::endl;
+    for (int i = 255; i > 0; i--) availableIps.push(std::to_string(i));
 }
 
-void Network::sendMessage(const std::string& senderId, const std::string& receiverId, const std::string& message)
+
+std::string Network::acquireIp()
 {
-    std::pair<std::string, std::string> messagePair(senderId, message);
-    std::pair<std::string, std::pair<std::string, std::string>> trafficPair(receiverId, messagePair);
-    this->current_traffic = trafficPair;
-    this->triggerTraffic();
+    std::string ipAddress = availableIps.top();
+    availableIps.pop();
+
+    return ipAddress;
 }
+
 
 void Network::triggerTraffic()
 {
@@ -27,7 +30,29 @@ void Network::triggerTraffic()
     }
 }
 
-void Network::connect(std::string nodeId, const std::function<void()>& handler) {
-    std::pair<std::string, std::function<void()>> handlerPair(nodeId, handler);
+
+void Network::sendMessage(const std::string& senderIp, const std::string& receiverIp, const std::string& message)
+{
+    std::pair<std::string, std::string> messagePair(senderIp, message);
+    std::pair<std::string, std::pair<std::string, std::string>> trafficPair(receiverIp, messagePair);
+    this->current_traffic = trafficPair;
+    this->triggerTraffic();
+}
+
+
+std::string Network::connect(const std::function<void()>& handler) {
+    std::string ipAddress = this->acquireIp();
+    std::pair<std::string, std::function<void()>> handlerPair(ipAddress, handler);
     connected.insert(handlerPair);
+    return ipAddress;
+}
+
+void Network::disconnect(const std::string &ipAddress)
+{
+    auto mapEntry = connected.find(ipAddress);
+    if (mapEntry != connected.end()) {
+        connected.erase(mapEntry);
+    }
+
+    availableIps.push(ipAddress);
 }

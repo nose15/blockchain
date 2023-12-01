@@ -10,6 +10,7 @@
 class NetworkClient {
 private:
     std::string nodeId;
+    std::string ipAddress;
     Network * network;
 public:
     NetworkClient(std::string, Network*);
