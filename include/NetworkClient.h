@@ -16,6 +16,7 @@ public:
     NetworkClient(std::string, Network*);
     void sendMessage(std::string, std::string);
     void trafficHandler();
+    void disconnect();
 };
 
 

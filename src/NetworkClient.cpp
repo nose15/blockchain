@@ -24,3 +24,7 @@ void NetworkClient::trafficHandler()
     std::cout << this->nodeId << " received a message" << std::endl;
 }
 
+void NetworkClient::disconnect() {
+    this->network->disconnect(this->ipAddress);
+    this->network = nullptr;
+}

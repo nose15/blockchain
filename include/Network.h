@@ -9,6 +9,7 @@
 #include <iostream>
 #include <functional>
 #include <stack>
+#include "NetworkMessage.h"
 
 #ifndef BLOCKCHAIN_NETWORK_H
 #define BLOCKCHAIN_NETWORK_H
@@ -16,7 +17,7 @@
 class Network
 {
 private:
-    std::pair<std::string, std::pair<std::string, std::string>> current_traffic;
+    NetworkMessage current_traffic;
     std::map<std::string, std::function<void()>> connected;
     std::stack<std::string> availableIps;
 
