@@ -18,7 +18,7 @@ class Network
 {
 private:
     NetworkMessage current_traffic;
-    std::map<std::string, std::function<void()>> connected;
+    std::map<std::string, std::function<void(NetworkMessage)>> connected;
     std::stack<std::string> availableIps;
 
     void triggerTraffic();
@@ -26,7 +26,7 @@ private:
 public:
     Network();
     void sendMessage(const std::string&, const std::string&, const std::string&);
-    std::string connect(const std::function<void()>&);
+    std::string connect(const std::function<void(NetworkMessage)>&);
     void disconnect(const std::string&);
 };
 

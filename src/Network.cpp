@@ -22,10 +22,19 @@ std::string Network::acquireIp()
 
 void Network::triggerTraffic()
 {
-    for (const auto& connection : connected) {
+    if (current_traffic.receiverIp == "0")
+    {
+        for (const auto& connection : connected)
+        {
+            connection.second(current_traffic);
+        }
+    }
+
+    for (const auto& connection : connected)
+    {
         if (current_traffic.receiverIp == connection.first)
         {
-            connection.second();
+            connection.second(current_traffic);
         }
     }
 }
@@ -39,9 +48,9 @@ void Network::sendMessage(const std::string& senderIp, const std::string& receiv
 }
 
 
-std::string Network::connect(const std::function<void()>& handler) {
+std::string Network::connect(const std::function<void(NetworkMessage)>& handler) {
     std::string ipAddress = this->acquireIp();
-    std::pair<std::string, std::function<void()>> handlerPair(ipAddress, handler);
+    std::pair<std::string, std::function<void(NetworkMessage)>> handlerPair(ipAddress, handler);
     connected.insert(handlerPair);
     return ipAddress;
 }

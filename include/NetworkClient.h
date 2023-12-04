@@ -14,8 +14,9 @@ private:
     Network * network;
 public:
     NetworkClient(std::string, Network*);
+    const std::string& getIp();
     void sendMessage(std::string, std::string);
-    void trafficHandler();
+    void trafficHandler(const NetworkMessage&);
     void disconnect();
 };
 

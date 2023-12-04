@@ -10,6 +10,7 @@ Node::Node(std::string id, Network * network) : m_id(std::move(id))
 {
     std::cout << "Node " << m_id << " created" << std::endl;
     this->networkClient = new NetworkClient(this->m_id, network);
+    this->blockchainClient = new BlockchainClient(networkClient);
 }
 
 std::string Node::getId()
@@ -20,4 +21,10 @@ std::string Node::getId()
 void Node::ping(std::string receiverIp)
 {
     networkClient->sendMessage(std::move(receiverIp), "ping");
+}
+
+
+void Node::transaction(std::string receiverId, int amount)
+{
+    blockchainClient->MakeTransaction(receiverId, amount);
 }
