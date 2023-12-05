@@ -10,10 +10,11 @@
 
 struct NetworkMessage {
     NetworkMessage() = default;
-    NetworkMessage(std::string  senderIp, std::string  receiverIp, std::string  message) : senderIp(std::move(senderIp)), receiverIp(std::move(receiverIp)), message(std::move(message)) {}
+    NetworkMessage(std::string senderIp, std::string receiverIp, std::string message, std::string port) : senderIp(std::move(senderIp)), receiverIp(std::move(receiverIp)), message(std::move(message)), port(std::move(port)) {}
     std::string senderIp;
     std::string receiverIp;
     std::string message;
+    std::string port;
 };
 
 #endif //BLOCKCHAIN_NETWORKMESSAGE_H

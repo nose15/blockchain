@@ -20,6 +20,7 @@ public:
     BlockchainClient(NetworkClient*);
     void DiscoverPeers();
     void MakeTransaction(std::string&, int);
+    void MessageHandler(NetworkMessage&);
 };
 
 

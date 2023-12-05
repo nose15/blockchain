@@ -40,9 +40,9 @@ void Network::triggerTraffic()
 }
 
 
-void Network::sendMessage(const std::string& senderIp, const std::string& receiverIp, const std::string& message)
+void Network::sendMessage(const std::string& senderIp, const std::string& receiverIp, const std::string& port, const std::string& message)
 {
-    NetworkMessage traffic(senderIp, receiverIp, message);
+    NetworkMessage traffic(senderIp, receiverIp, message, port);
     this->current_traffic = traffic;
     this->triggerTraffic();
 }

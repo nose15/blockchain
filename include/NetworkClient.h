@@ -12,12 +12,14 @@ private:
     std::string nodeId;
     std::string ipAddress;
     Network * network;
+    std::map<std::string, std::function<void(NetworkMessage&)>> portHandlers;
 public:
     NetworkClient(std::string, Network*);
     const std::string& getIp();
-    void sendMessage(std::string, std::string);
-    void trafficHandler(const NetworkMessage&);
+    void sendMessage(std::string, std::string, std::string);
+    void trafficHandler(NetworkMessage&);
     void disconnect();
+    void addPortHandler(std::string port, std::function<void(NetworkMessage&)>);
 };
 
 

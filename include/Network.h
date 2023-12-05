@@ -25,7 +25,7 @@ private:
     std::string acquireIp();
 public:
     Network();
-    void sendMessage(const std::string&, const std::string&, const std::string&);
+    void sendMessage(const std::string&, const std::string&, const std::string&, const std::string&);
     std::string connect(const std::function<void(NetworkMessage)>&);
     void disconnect(const std::string&);
 };

@@ -2,8 +2,6 @@
 // Created by lukol on 26.11.2023.
 //
 
-#include <utility>
-
 #include "../include/Node.h"
 
 Node::Node(std::string id, Network * network) : m_id(std::move(id))
@@ -20,7 +18,7 @@ std::string Node::getId()
 
 void Node::ping(std::string receiverIp)
 {
-    networkClient->sendMessage(std::move(receiverIp), "ping");
+    networkClient->sendMessage(std::move(receiverIp), "0", "ping");
 }
 
 
