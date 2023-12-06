@@ -28,14 +28,14 @@ void Network::triggerTraffic()
         {
             connection.second(current_traffic);
         }
+
+        return;
     }
 
-    for (const auto& connection : connected)
+    auto receiver = connected.find(current_traffic.receiverIp);
+    if (receiver != connected.end())
     {
-        if (current_traffic.receiverIp == connection.first)
-        {
-            connection.second(current_traffic);
-        }
+        receiver->second(current_traffic);
     }
 }
 
@@ -47,6 +47,14 @@ void Network::sendMessage(const std::string& senderIp, const std::string& receiv
     this->triggerTraffic();
 }
 
+void Network::sendMessage(const std::string& senderIp, const std::string& receiverIp, const std::string& message)
+{
+    NetworkMessage traffic(senderIp, receiverIp, message);
+    this->current_traffic = traffic;
+    this->triggerTraffic();
+}
+
+
 
 std::string Network::connect(const std::function<void(NetworkMessage)>& handler) {
     std::string ipAddress = this->acquireIp();
@@ -57,9 +65,9 @@ std::string Network::connect(const std::function<void(NetworkMessage)>& handler)
 
 void Network::disconnect(const std::string &ipAddress)
 {
-    auto mapEntry = connected.find(ipAddress);
-    if (mapEntry != connected.end()) {
-        connected.erase(mapEntry);
+    auto node = connected.find(ipAddress);
+    if (node != connected.end()) {
+        connected.erase(node);
     }
 
     availableIps.push(ipAddress);

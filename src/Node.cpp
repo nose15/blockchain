@@ -16,9 +16,9 @@ std::string Node::getId()
     return m_id;
 }
 
-void Node::ping(std::string receiverIp)
+void Node::ping(const std::string& receiverIp)
 {
-    networkClient->sendMessage(std::move(receiverIp), "0", "ping");
+    networkClient->SendMessage(receiverIp, "0", "ping");
 }
 
 

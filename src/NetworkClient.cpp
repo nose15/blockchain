@@ -4,42 +4,50 @@
 
 #include <iostream>
 #include <string>
+#include <utility>
 
 #include "../include/NetworkClient.h"
 
 
-NetworkClient::NetworkClient(std::string nodeId, Network * network) : nodeId(nodeId), network(network)
+NetworkClient::NetworkClient(std::string nodeId, Network * network) : nodeId(std::move(nodeId)), network(network)
 {
     this->ipAddress = network->connect([this](NetworkMessage networkMessage) {this->trafficHandler(networkMessage);});
     std::cout << "NetworkClient for " << this->nodeId << " established" << std::endl;
 }
 
-void NetworkClient::sendMessage(std::string receiverIp, std::string port, std::string message)
+void NetworkClient::SendMessage(const std::string& receiverIp, const std::string& port, const std::string& message)
 {
     network->sendMessage(this->ipAddress, receiverIp, port, message);
 }
 
+void NetworkClient::BroadcastMessage(const std::string& message)
+{
+    network->sendMessage(this->ipAddress, "0", message);
+}
+
 void NetworkClient::trafficHandler(NetworkMessage& networkMessage)
 {
-    auto iter = portHandlers.find(networkMessage.port);
-    if (iter == portHandlers.end())
+    if (networkMessage.receiverIp=="0" && networkMessage.port.empty()) {
+        std::cout << this->nodeId << " received a broadcasted message" << std::endl;
+        return;
+    }
+
+    auto node = portHandlers.find(networkMessage.port);
+    if (node == portHandlers.end())
     {
         std::cout << this->nodeId << " Received a message but to invalid port" << std::endl;
         return;
     }
-    iter->second(networkMessage);
+    node->second(networkMessage);
 }
 
 void NetworkClient::disconnect() {
     this->network->disconnect(this->ipAddress);
     this->network = nullptr;
-}
+} // TODO: Connect method, so the client can be reused
 
-const std::string& NetworkClient::getIp() {
-    return this->ipAddress;
-}
 
-void NetworkClient::addPortHandler(std::string port, std::function<void(NetworkMessage&)> handler)
+void NetworkClient::addPortHandler(const std::string& port, const std::function<void(NetworkMessage&)>& handler)
 {
     auto iter = portHandlers.find(port);
     if (iter != portHandlers.end()) throw std::runtime_error("This port is already occupied"); // TODO: Add custom errors
@@ -48,3 +56,7 @@ void NetworkClient::addPortHandler(std::string port, std::function<void(NetworkM
 
     portHandlers.insert(handlerPair);
 }
+
+
+const std::string& NetworkClient::getIp() { return this->ipAddress; }
+

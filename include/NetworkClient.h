@@ -16,10 +16,12 @@ private:
 public:
     NetworkClient(std::string, Network*);
     const std::string& getIp();
-    void sendMessage(std::string, std::string, std::string);
+    void SendMessage(const std::string &receiverIp, const std::string &port, const std::string &message);
+    void BroadcastMessage(const std::string &message);
     void trafficHandler(NetworkMessage&);
     void disconnect();
-    void addPortHandler(std::string port, std::function<void(NetworkMessage&)>);
+    void addPortHandler(const std::string& port, const std::function<void(NetworkMessage&)>&);
+
 };
 
 

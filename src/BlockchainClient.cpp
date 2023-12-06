@@ -17,16 +17,11 @@ BlockchainClient::BlockchainClient(NetworkClient * networkClient) : networkClien
 void BlockchainClient::MakeTransaction(std::string &receiverId, int amount)
 {
     Transaction transaction(this->id, receiverId, amount);
-
-    std::string receiverIp;
-    for (const auto& peer : peers) {
-        if (peer.first == receiverId) receiverIp = peer.second.first;
-    }
-
-    networkClient->sendMessage("0", "8000", "T " + transaction.to_string());
+    networkClient->BroadcastMessage("T " + transaction.to_string()); // temporarily it broadcasts - TODO: Send to all peers (allows for multiple port support as peers can have their port specified)
 }
 
 void BlockchainClient::DiscoverPeers() {
+
     std::pair<std::string, std::pair<std::string, std::string>> peer = std::pair<std::string, std::pair<std::string, std::string>>("2", std::pair<std::string, std::string>("2", "1"));
     peers.insert(peer);
     // For now, it's hard-coded - TODO: Add a peer discovery mechanism that works over the network
