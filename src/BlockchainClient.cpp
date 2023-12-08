@@ -83,3 +83,15 @@ void BlockchainClient::PeerRequestEndpointHandler(NetworkMessage & networkMessag
 {
 
 }
+
+void BlockchainClient::DiscoverPeers() {
+    std::pair<std::string, std::pair<std::string, std::string>> peer = std::pair<std::string, std::pair<std::string, std::string>>("2", std::pair<std::string, std::string>("2", "1"));
+    peers.insert(peer);
+}
+
+BlockchainClient::BlockchainClient(NetworkClient * networkClient) : networkClient(networkClient) {
+    this->id = networkClient->getIp(); // temporary solution - TODO: More sophisticated id generation
+    networkClient->addPortHandler("8000", [this](NetworkMessage& networkMessage) {this->MessageHandler(networkMessage);});
+    DiscoverPeers();
+    std::cout << "Blockchain client established" << std::endl;
+}

@@ -40,21 +40,11 @@ void Network::triggerTraffic()
 }
 
 
-void Network::sendMessage(const std::string& senderIp, const std::string& receiverIp, const std::string& port, const std::string& message)
+void Network::SendMessage(const NetworkMessage & networkMessage)
 {
-    NetworkMessage traffic(senderIp, receiverIp, message, port);
-    this->current_traffic = traffic;
+    this->current_traffic = networkMessage;
     this->triggerTraffic();
 }
-
-void Network::sendMessage(const std::string& senderIp, const std::string& receiverIp, const std::string& message)
-{
-    NetworkMessage traffic(senderIp, receiverIp, message);
-    this->current_traffic = traffic;
-    this->triggerTraffic();
-}
-
-
 
 std::string Network::connect(const std::function<void(NetworkMessage)>& handler) {
     std::string ipAddress = this->acquireIp();

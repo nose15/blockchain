@@ -24,6 +24,8 @@ private:
     void ConnectionEndpointHandler(NetworkMessage &);
 public:
     BlockchainClient(NetworkClient*, const std::map<std::string, std::pair<std::string, std::string>>&);
+    BlockchainClient(NetworkClient *);
+    void DiscoverPeers();
     void DiscoverPeers(const std::map<std::string, std::pair<std::string, std::string>>&);
     void MakeTransaction(std::string&, int);
     void MessageHandler(NetworkMessage&);

@@ -18,6 +18,7 @@ public:
     std::string getId();
     void ping(const std::string&);
     void transaction(std::string, int);
+    void Request();
 };
 
 #endif //BLOCKCHAIN_NODE_H

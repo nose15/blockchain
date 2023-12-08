@@ -6,6 +6,8 @@
 #include "./Node.cpp"
 #include "./BlockchainClient.cpp"
 #include "./Transaction.cpp"
+#include "./PendingRequest.cpp"
+#include "./Utils.cpp"
 
 // TODO: Better network infrastructure. Allow network clients to send requests and receive responses instead of just
 // TODO: sending messages.
@@ -25,6 +27,8 @@ int main()
 
     node1.ping("2");
     node1.transaction("2", 10);
+
+    node1.Request();
 
     return 0;
 }
