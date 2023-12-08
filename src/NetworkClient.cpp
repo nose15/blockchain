@@ -11,7 +11,7 @@
 
 NetworkClient::NetworkClient(std::string nodeId, Network * network) : nodeId(std::move(nodeId)), network(network)
 {
-    this->ipAddress = network->connect([this](NetworkMessage networkMessage) {this->trafficHandler(networkMessage);});
+    this->ipAddress = network->connect([this](NetworkMessage networkMessage) { this->MessageHandler(networkMessage);});
     std::cout << "NetworkClient for " << this->nodeId << " established" << std::endl;
 }
 
@@ -25,7 +25,7 @@ void NetworkClient::BroadcastMessage(const std::string& message)
     network->sendMessage(this->ipAddress, "0", message);
 }
 
-void NetworkClient::trafficHandler(NetworkMessage& networkMessage)
+void NetworkClient::MessageHandler(NetworkMessage&)
 {
     if (networkMessage.receiverIp=="0" && networkMessage.port.empty()) {
         std::cout << this->nodeId << " received a broadcasted message" << std::endl;
@@ -36,6 +36,11 @@ void NetworkClient::trafficHandler(NetworkMessage& networkMessage)
     if (node == portHandlers.end())
     {
         std::cout << this->nodeId << " Received a message but to invalid port" << std::endl;
+        return;
+    }
+
+    if (networkMessage.message[0] == 'R') {
+        ResponseHandler(networkMessage);
         return;
     }
     node->second(networkMessage);
@@ -59,4 +64,11 @@ void NetworkClient::addPortHandler(const std::string& port, const std::function<
 
 
 const std::string& NetworkClient::getIp() { return this->ipAddress; }
+
+std::future<NetworkMessage> NetworkClient::Request(const std::string &receiverIp, const std::string &port, const std::string &message) {
+    // The function sends a requests and then returns the response future
+    // The future is then filled by the response handler
+
+    return std::future<NetworkMessage>();
+}
 

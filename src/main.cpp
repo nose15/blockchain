@@ -7,6 +7,15 @@
 #include "./BlockchainClient.cpp"
 #include "./Transaction.cpp"
 
+// TODO: Better network infrastructure. Allow network clients to send requests and receive responses instead of just
+// TODO: sending messages.
+
+// TODO: Routing system
+// TODO: Message parser
+
+// TODO: The request has to have the id so it knows which response is his
+
+// TODO: Basically need to rebuild the whole network and then it will become easy because then its just webdev lol
 
 int main()
 {

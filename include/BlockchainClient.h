@@ -16,11 +16,18 @@ private:
     std::map<std::string, std::pair<std::string, std::string>> peers;
     std::string id;
     NetworkClient * networkClient;
+    void InitialDiscovery(const std::map<std::string, std::pair<std::string, std::string>>&);
+    void ConnectPeer(std::string, const std::pair<std::string, std::string>&);
+    void RequestPeers(const std::string &ip);
+
+    void PeerRequestEndpointHandler(NetworkMessage &);
+    void ConnectionEndpointHandler(NetworkMessage &);
 public:
-    BlockchainClient(NetworkClient*);
-    void DiscoverPeers();
+    BlockchainClient(NetworkClient*, const std::map<std::string, std::pair<std::string, std::string>>&);
+    void DiscoverPeers(const std::map<std::string, std::pair<std::string, std::string>>&);
     void MakeTransaction(std::string&, int);
     void MessageHandler(NetworkMessage&);
+
 };
 
 
