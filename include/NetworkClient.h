@@ -2,6 +2,7 @@
 // Created by lukol on 29.11.2023.
 //
 
+#include "./Address.h"
 #include "./Network.h"
 #include "./PendingRequest.h"
 #include "./Utils.h"
@@ -13,11 +14,11 @@
 class NetworkClient {
 private:
     std::string nodeId;
-    std::string ipAddress;
+    std::string m_ipAddress;
     std::vector<PendingRequest> m_pendingRequests;
 
     Network * network;
-    std::map<std::string, std::function<void(NetworkMessage&)>> portHandlers;
+    std::map<std::string, std::function<NetworkMessage(NetworkMessage&)>> portHandlers;
     NetworkMessage currentResponse;
 
     void ResponseHandler(const NetworkMessage &);
@@ -27,8 +28,8 @@ public:
     void BroadcastMessage(const std::string &message);
     void MessageHandler(NetworkMessage&);
     void disconnect();
-    void addPortHandler(const std::string& port, const std::function<void(NetworkMessage&)>&);
-    NetworkMessage SendRequest(const std::string &, const std::string &, const std::string &);
+    void addPortHandler(const std::string& port, const std::function<NetworkMessage(NetworkMessage&)>&);
+    NetworkMessage SendRequest(const Address & receiverAddress, const std::string & responsePort, const std::string &);
 };
 
 

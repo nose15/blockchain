@@ -16,7 +16,7 @@ private:
 public:
     Node(std::string, Network * network);
     std::string getId();
-    void ping(const std::string&);
+    void Ping(const Address & receiverAddress);
     void transaction(std::string, int);
     void Request();
 };

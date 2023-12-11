@@ -11,7 +11,7 @@
 
 NetworkClient::NetworkClient(std::string nodeId, Network * network) : nodeId(std::move(nodeId)), network(network)
 {
-    this->ipAddress = network->connect([this](NetworkMessage networkMessage) { this->MessageHandler(networkMessage);});
+    this->m_ipAddress = network->connect([this](NetworkMessage networkMessage) { this->MessageHandler(networkMessage);});
     std::cout << "NetworkClient for " << this->nodeId << " established" << std::endl;
 }
 
@@ -19,21 +19,26 @@ void NetworkClient::BroadcastMessage(const std::string& message)
 {
     //TODO: Add NetworkMessageFactory
     unsigned int id = Utils::generateRandomId();
-    NetworkMessage networkMessage(this->ipAddress, "0", message, "", id, Broadcast);
+    NetworkMessage networkMessage(id, Broadcast, Address(m_ipAddress, "0"), Address("0", "0"), message);
     network->SendMessage(networkMessage);
 }
 
 void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
 {
-    //TODO: Once ports are working, make it a proper message handler and pull out the request, response etc. handlers
     switch (networkMessage.m_messageType) {
         case Response: {
             ResponseHandler(networkMessage);
             break;
         }
         case Request: {
-            NetworkMessage responseMessage(this->ipAddress, networkMessage.senderIp, "RR it works", "0", networkMessage.id, Response);
-            this->network->SendMessage(responseMessage);
+            std::string port = networkMessage.m_senderAddress.port;
+            try {
+                std::function<NetworkMessage(NetworkMessage &)> portHandler = portHandlers[port];
+                NetworkMessage response = portHandler(networkMessage);
+                network->SendMessage(response);
+            } catch (const std::bad_function_call & e) {
+                std::cout << "func doesnt exist for " << port << std::endl;
+            }
             break;
         }
         case Broadcast: {
@@ -41,7 +46,8 @@ void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
             break;
         }
         case Ping: {
-            NetworkMessage responseMessage(this->ipAddress, networkMessage.senderIp, "pong", "0", networkMessage.id, Response);
+            std::string port = networkMessage.m_senderAddress.port;
+            NetworkMessage responseMessage(networkMessage.m_id, Response, Address(m_ipAddress, port), networkMessage.m_senderAddress, "pong");
             break;
         }
         default: {
@@ -49,7 +55,7 @@ void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
         }
     }
 
-    auto node = portHandlers.find(networkMessage.port);
+    auto node = portHandlers.find(networkMessage.m_receiverAddress.port);
     if (node == portHandlers.end())
     {
         return;
@@ -59,26 +65,26 @@ void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
 }
 
 void NetworkClient::disconnect() {
-    this->network->disconnect(this->ipAddress);
+    this->network->disconnect(this->m_ipAddress);
     this->network = nullptr;
 } // TODO: Connect method, so the client can be reused
 
 
-void NetworkClient::addPortHandler(const std::string& port, const std::function<void(NetworkMessage&)>& handler)
+void NetworkClient::addPortHandler(const std::string& port, const std::function<NetworkMessage(NetworkMessage&)>& handler)
 {
     auto iter = portHandlers.find(port);
     if (iter != portHandlers.end()) throw std::runtime_error("This port is already occupied"); // TODO: Add custom errors
 
-    std::pair<std::string, std::function<void(NetworkMessage&)>> handlerPair(port, handler);
+    std::pair<std::string, std::function<NetworkMessage(NetworkMessage&)>> handlerPair(port, handler);
 
     portHandlers.insert(handlerPair);
 }
 
 
-const std::string& NetworkClient::getIp() { return this->ipAddress; }
+const std::string& NetworkClient::getIp() { return this->m_ipAddress; }
 
 
-NetworkMessage NetworkClient::SendRequest(const std::string &receiverIp, const std::string &port, const std::string &message)
+NetworkMessage NetworkClient::SendRequest(const Address & receiverAddress, const std::string & responsePort, const std::string &message)
 {
     std::promise<NetworkMessage> pendingResponse;
     std::future<NetworkMessage> responseFuture = pendingResponse.get_future();
@@ -87,7 +93,7 @@ NetworkMessage NetworkClient::SendRequest(const std::string &receiverIp, const s
     PendingRequest pendingRequest(requestId, responseFuture, pendingResponse);
     m_pendingRequests.push_back(pendingRequest);
 
-    NetworkMessage networkMessage(this->ipAddress, receiverIp, message, port, requestId, Request);
+    NetworkMessage networkMessage(requestId, Request, Address(m_ipAddress, responsePort), receiverAddress, message);
     this->network->SendMessage(networkMessage);
     NetworkMessage response = responseFuture.get();
 
@@ -103,7 +109,7 @@ void NetworkClient::ResponseHandler(const NetworkMessage & networkMessage)
 
     for (auto pendingRequest : this->m_pendingRequests)
     {
-        if (pendingRequest.GetId() == networkMessage.id)
+        if (pendingRequest.GetId() == networkMessage.m_id)
         {
             pendingRequest.Resolve(networkMessage);
         }

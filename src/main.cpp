@@ -9,15 +9,8 @@
 #include "./PendingRequest.cpp"
 #include "./Utils.cpp"
 
-// TODO: Better network infrastructure. Allow network clients to send requests and receive responses instead of just
-// TODO: sending messages.
-
-// TODO: Routing system
+// TODO: Router for applications
 // TODO: Message parser
-
-// TODO: The request has to have the id so it knows which response is his
-
-// TODO: Basically need to rebuild the whole network and then it will become easy because then its just webdev lol
 
 int main()
 {
@@ -25,7 +18,7 @@ int main()
     Node node1("1", &network);
     Node node2("2", &network);
 
-    node1.ping("2");
+    node1.Ping(Address("2", "8000"));
     node1.transaction("2", 10);
 
     node1.Request();

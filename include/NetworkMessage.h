@@ -2,6 +2,7 @@
 // Created by lukasz on 03.12.23.
 //
 
+#include "./Address.h"
 #include <string>
 #include <utility>
 #include <random>
@@ -19,17 +20,15 @@ enum MessageType {
 
 struct NetworkMessage {
     NetworkMessage() = default;
-    NetworkMessage(std::string senderIp, std::string receiverIp, std::string message, std::string port, unsigned int id, MessageType type) : senderIp(std::move(senderIp)), receiverIp(std::move(receiverIp)), message(std::move(message)), port(std::move(port)), id(id), m_messageType(type) {}
-    NetworkMessage(std::string senderIp, std::string receiverIp, std::string message, std::string port) : senderIp(std::move(senderIp)), receiverIp(std::move(receiverIp)), message(std::move(message)), port(std::move(port)) {}
-    NetworkMessage(std::string senderIp, std::string receiverIp, std::string message) : senderIp(std::move(senderIp)), receiverIp(std::move(receiverIp)), message(std::move(message)) { this->port = ""; }
+    NetworkMessage(unsigned int id, MessageType type, Address senderAddress, Address receiverAddress, std::string body) : m_id(id), m_messageType(type), m_senderAddress(std::move(senderAddress)), m_receiverAddress(std::move(receiverAddress)), m_body(std::move(body)) {}
+    NetworkMessage(unsigned int id, Address senderAddress, Address receiverAddress, std::string body) : m_id(id), m_senderAddress(std::move(senderAddress)), m_receiverAddress(std::move(receiverAddress)), m_body(std::move(body)) { m_messageType = Request; }
 
-    unsigned int id;
-    MessageType m_messageType;
-    std::string endpoint;
-    std::string senderIp;
-    std::string receiverIp;
-    std::string message;
-    std::string port;
+    unsigned int m_id = 0;
+    Address m_senderAddress = Address("0", "0");
+    Address m_receiverAddress = Address("0", "0");;
+    MessageType m_messageType = Ping;
+    std::string m_endpoint = "/";
+    std::string m_body = "A";
 };
 
 #endif //BLOCKCHAIN_NETWORKMESSAGE_H
