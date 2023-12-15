@@ -2,7 +2,7 @@
 // Created by lukol on 04.12.2023.
 //
 
-#include "../include/Transaction.h"
+#include "../../include/Blockchain/Transaction.h"
 Transaction::Transaction(std::string &senderIp, std::string &receiverIp, int amount) : senderId(senderIp), receiverId(receiverIp), amount(amount) {}
 
 std::string Transaction::to_string() {

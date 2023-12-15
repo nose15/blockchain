@@ -16,3 +16,26 @@ unsigned int Utils::generateRandomId()
 
     return dis(gen);
 }
+
+std::vector<std::string> Utils::SplitString(const std::string& str, char separator) {
+    std::vector<std::string> result = {};
+
+    std::string currentString;
+    for (char currentChar: str)
+    {
+        if (currentChar == separator) {
+            result.push_back(currentString);
+            currentString = "";
+            continue;
+        }
+
+        currentString += currentChar;
+    }
+
+    if (!currentString.empty())
+    {
+        result.push_back(currentString);
+    }
+
+    return result;
+}

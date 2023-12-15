@@ -2,7 +2,7 @@
 // Created by lukasz on 08.12.23.
 //
 
-#include "../include/PendingRequest.h"
+#include "../../include/Network/PendingRequest.h"
 
 PendingRequest::PendingRequest(unsigned int id, std::future<NetworkMessage> & responseRef, std::promise<NetworkMessage> & responsePromise) : responseRef(responseRef), responsePromise(responsePromise) {
     this->id = id;

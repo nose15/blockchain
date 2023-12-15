@@ -9,6 +9,8 @@
 class Utils {
 public:
     static unsigned int generateRandomId();
+
+    static std::vector<std::string> SplitString(const std::string& str, char separator);
 };
 
 

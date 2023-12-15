@@ -1,17 +1,17 @@
 //
 // Created by lukol on 26.11.2023.
 //
-#include "./Network.cpp"
-#include "./NetworkClient.cpp"
+#include "Network/Network.cpp"
+#include "Network/NetworkClient.cpp"
 #include "./Node.cpp"
-#include "./BlockchainClient.cpp"
-#include "./Transaction.cpp"
-#include "./PendingRequest.cpp"
+#include "Blockchain/BlockchainClient.cpp"
+#include "Blockchain/Transaction.cpp"
+#include "Network/PendingRequest.cpp"
 #include "./Utils.cpp"
-#include "./NetworkMessage.cpp"
+#include "Network/NetworkMessage.cpp"
 
 // TODO: Router for applications
-// TODO: Message parser
+// TODO: Message parser - JSON like object with a possibility to serialize it into a string
 
 int main()
 {

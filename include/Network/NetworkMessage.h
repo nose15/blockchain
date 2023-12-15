@@ -2,7 +2,7 @@
 // Created by lukasz on 03.12.23.
 //
 
-#include "./Address.h"
+#include "../Structs/Address.h"
 #include <string>
 #include <utility>
 #include <random>

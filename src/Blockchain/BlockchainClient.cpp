@@ -3,14 +3,14 @@
 //
 
 #include <string>
-#include "../include/BlockchainClient.h"
+#include "../../include/Blockchain/BlockchainClient.h"
 #include <map>
 
-BlockchainClient::BlockchainClient(NetworkClient * networkClient, const std::map<std::string, std::pair<std::string, std::string>>& initialPeers) : networkClient(networkClient)
+BlockchainClient::BlockchainClient(NetworkClient * networkClient, const std::map<std::string, std::pair<std::string, std::string>> & initialPeers) : networkClient(networkClient)
 {
     this->id = networkClient->getIp(); // temporary solution - TODO: More sophisticated id generation
     networkClient->addPortHandler("8000", [this](NetworkMessage& networkMessage) -> NetworkMessage { return this->MessageHandler(networkMessage); });
-    DiscoverPeers();
+    DiscoverPeers(initialPeers);
     std::cout << "Blockchain client established" << std::endl;
 }
 
@@ -38,7 +38,12 @@ NetworkMessage BlockchainClient::MessageHandler(NetworkMessage & networkMessage)
     return responseMessage;
 }
 
-void BlockchainClient::DiscoverPeers(const std::map<std::string, std::pair<std::string, std::string>>& peerMap) {
+void BlockchainClient::DiscoverPeers(const std::string & initialPeers) {
+    std::vector<std::string> addressStrings = Utils::SplitString(initialPeers, ' ');
+    for (auto address : addressStrings) {
+        Address receiverAddress(peer.first, "8000");
+        NetworkMessage response = networkClient->SendRequest(receiverAddress, "8000", "1000"); // Need some kind of communication codes for the blockchain
+    }
 
     std::pair<std::string, std::pair<std::string, std::string>> peer = std::pair<std::string, std::pair<std::string, std::string>>("2", std::pair<std::string, std::string>("2", "1"));
     peers.insert(peer);
