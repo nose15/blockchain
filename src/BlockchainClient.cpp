@@ -27,14 +27,14 @@ void BlockchainClient::MakeTransaction(std::string &receiverId, int amount)
     networkClient->BroadcastMessage("T " + transaction.to_string()); // temporarily it broadcasts - TODO: Send to all peers (allows for multiple port support as peers can have their port specified)
 }
 
-NetworkMessage BlockchainClient::MessageHandler(NetworkMessage &networkMessage)
+NetworkMessage BlockchainClient::MessageHandler(NetworkMessage & networkMessage)
 {
     // The purpose of this function will be to route to the desired endpoints (there will be a global collection of
     // endpoint names and their handler functions and this function will route it
 
-    std::cout << "Blockchain Client nr." << this->id << " received a message " << networkMessage.m_body << std::endl;
+    std::cout << "Blockchain Client nr." << this->id << " received a message " << networkMessage.Body() << std::endl;
 
-    NetworkMessage responseMessage(networkMessage.m_id, Response, networkMessage.m_receiverAddress, networkMessage.m_senderAddress, "Hi " + networkMessage.m_senderAddress.ip);
+    NetworkMessage responseMessage(networkMessage.Id(), Response, networkMessage.ReceiverAddress(), networkMessage.SenderAddress(), "Hi " + networkMessage.SenderAddress().ip);
     return responseMessage;
 }
 
@@ -79,7 +79,7 @@ void BlockchainClient::ConnectionEndpointHandler(NetworkMessage & networkMessage
     bool connected = false;
 
     for (const auto& peer : peers) {
-        if (peer.second.first == networkMessage.m_senderAddress.ip) {
+        if (peer.second.first == networkMessage.SenderAddress().ip) {
             connected = true;
         }
     }

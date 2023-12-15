@@ -22,7 +22,7 @@ std::string Node::getId()
 void Node::Ping(const Address & receiverAddress)
 {
     NetworkMessage response = networkClient->SendRequest(receiverAddress, "8000", "ping");
-    std::cout << this->m_id << " ping " << receiverAddress.ip << ":" << receiverAddress.port << " => " << response.m_body << std::endl;
+    std::cout << this->m_id << " ping " << receiverAddress.ip << ":" << receiverAddress.port << " => " << response.Body() << std::endl;
 }
 
 

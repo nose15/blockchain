@@ -8,6 +8,7 @@
 #include "./Transaction.cpp"
 #include "./PendingRequest.cpp"
 #include "./Utils.cpp"
+#include "./NetworkMessage.cpp"
 
 // TODO: Router for applications
 // TODO: Message parser

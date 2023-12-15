@@ -25,13 +25,15 @@ void NetworkClient::BroadcastMessage(const std::string& message)
 
 void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
 {
-    switch (networkMessage.m_messageType) {
+
+
+    switch (networkMessage.Type()) {
         case Response: {
             ResponseHandler(networkMessage);
             break;
         }
         case Request: {
-            std::string port = networkMessage.m_senderAddress.port;
+            std::string port = networkMessage.SenderAddress().port;
             try {
                 std::function<NetworkMessage(NetworkMessage &)> portHandler = portHandlers[port];
                 NetworkMessage response = portHandler(networkMessage);
@@ -46,8 +48,8 @@ void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
             break;
         }
         case Ping: {
-            std::string port = networkMessage.m_senderAddress.port;
-            NetworkMessage responseMessage(networkMessage.m_id, Response, Address(m_ipAddress, port), networkMessage.m_senderAddress, "pong");
+            std::string port = networkMessage.SenderAddress().port;
+            NetworkMessage responseMessage(networkMessage.Id(), Response, Address(m_ipAddress, port), networkMessage.SenderAddress(), "pong");
             break;
         }
         default: {
@@ -55,7 +57,7 @@ void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
         }
     }
 
-    auto node = portHandlers.find(networkMessage.m_receiverAddress.port);
+    auto node = portHandlers.find(networkMessage.SenderAddress().port);
     if (node == portHandlers.end())
     {
         return;
@@ -100,16 +102,16 @@ NetworkMessage NetworkClient::SendRequest(const Address & receiverAddress, const
     return response;
 }
 
-void NetworkClient::ResponseHandler(const NetworkMessage & networkMessage)
+void NetworkClient::ResponseHandler(NetworkMessage & networkMessage)
 {
-    if (networkMessage.m_messageType != Response)
+    if (networkMessage.Type() != Response)
     {
         return;
     }
 
     for (auto pendingRequest : this->m_pendingRequests)
     {
-        if (pendingRequest.GetId() == networkMessage.m_id)
+        if (pendingRequest.GetId() == networkMessage.Id())
         {
             pendingRequest.Resolve(networkMessage);
         }

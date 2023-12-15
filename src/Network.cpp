@@ -22,7 +22,7 @@ std::string Network::acquireIp()
 
 void Network::triggerTraffic()
 {
-    if (current_traffic.m_receiverAddress.ip == "0")
+    if (current_traffic.ReceiverAddress().ip == "0")
     {
         for (const auto& connection : connected)
         {
@@ -32,7 +32,7 @@ void Network::triggerTraffic()
         return;
     }
 
-    auto receiver = connected.find(current_traffic.m_receiverAddress.ip);
+    auto receiver = connected.find(current_traffic.ReceiverAddress().ip);
     if (receiver != connected.end())
     {
         receiver->second(current_traffic);
