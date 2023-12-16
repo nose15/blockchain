@@ -6,6 +6,8 @@
 #include <string>
 #include <utility>
 #include <random>
+#include "../external/nlohmann/json.hpp"
+using json = nlohmann::json;
 
 #ifndef BLOCKCHAIN_NETWORKMESSAGE_H
 #define BLOCKCHAIN_NETWORKMESSAGE_H
@@ -28,15 +30,15 @@ class NetworkMessage {
 
 public:
     NetworkMessage() = default;
-    NetworkMessage(unsigned int id, MessageType type, Address senderAddress, Address receiverAddress, std::string body);
-    NetworkMessage(unsigned int id, Address senderAddress, Address receiverAddress, std::string body);
+    NetworkMessage(unsigned int id, MessageType type, Address senderAddress, Address receiverAddress, std::string message);
+    NetworkMessage(unsigned int id, Address senderAddress, Address receiverAddress, std::string message);
     unsigned int Id();
     std::string Body();
     std::string EndPoint();
     MessageType Type();
     Address SenderAddress();
     Address ReceiverAddress();
-
+    json Json();
 };
 
 #endif //BLOCKCHAIN_NETWORKMESSAGE_H

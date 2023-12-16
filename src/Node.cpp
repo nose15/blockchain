@@ -21,8 +21,9 @@ std::string Node::getId()
 //TODO: Implement some UI
 void Node::Ping(const Address & receiverAddress)
 {
-    NetworkMessage response = networkClient->SendRequest(receiverAddress, "8000", "ping");
-    std::cout << this->m_id << " ping " << receiverAddress.ip << ":" << receiverAddress.port << " => " << response.Body() << std::endl;
+    NetworkMessage response = networkClient->SendRequest(receiverAddress, "8000", R"({"message": "ping"})");
+    json body = response.Json();
+    std::cout << this->m_id << " ping " << receiverAddress.ip << ":" << receiverAddress.port << " => " << body["message"] << std::endl;
 }
 
 
@@ -32,5 +33,5 @@ void Node::transaction(std::string receiverId, int amount)
 }
 
 void Node::Request() {
-    NetworkMessage response = this->networkClient->SendRequest(Address("2", "8000"), "8000", "R1");
+    NetworkMessage response = this->networkClient->SendRequest(Address("2", "8000"), "8000", R"({"message": "request1"})");
 }

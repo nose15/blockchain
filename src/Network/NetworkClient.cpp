@@ -49,7 +49,7 @@ void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
         }
         case Ping: {
             std::string port = networkMessage.SenderAddress().port;
-            NetworkMessage responseMessage(networkMessage.Id(), Response, Address(m_ipAddress, port), networkMessage.SenderAddress(), "pong");
+            NetworkMessage responseMessage(networkMessage.Id(), Response, Address(m_ipAddress, port), networkMessage.SenderAddress(), "{}");
             break;
         }
         default: {
