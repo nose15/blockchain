@@ -35,6 +35,7 @@ void Network::triggerTraffic()
     auto receiver = connected.find(current_traffic.ReceiverAddress().ip);
     if (receiver != connected.end())
     {
+        std::cout << "" << std::endl;
         receiver->second(current_traffic);
 
     }

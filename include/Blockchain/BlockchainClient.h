@@ -13,20 +13,20 @@
 
 class BlockchainClient {
 private:
-    std::map<std::string, std::pair<std::string, std::string>> peers;
+    std::map<std::string, Address> peers;
     std::string id;
     NetworkClient * networkClient;
     void InitialDiscovery(const std::string&);
-    void ConnectPeer(const std::string&, const Address & address);
+    void ConnectPeer(const Address & address);
     void RequestPeers(const std::string &ip);
 
     void PeerRequestEndpointHandler(NetworkMessage &);
     void ConnectionEndpointHandler(NetworkMessage &);
 public:
-    BlockchainClient(NetworkClient*, const std::map<std::string, std::pair<std::string, std::string>>&);
-    BlockchainClient(NetworkClient *);
-    void DiscoverPeers();
-    void DiscoverPeers(const std::string&);
+    BlockchainClient(NetworkClient*);
+//    BlockchainClient(NetworkClient *);
+    void StartPeerDiscovery(const std::vector<Address>& initialPeers);
+    void DiscoverPeers(const std::vector<Address>& initialPeers);
     void MakeTransaction(std::string&, int);
     NetworkMessage MessageHandler(NetworkMessage&);
 

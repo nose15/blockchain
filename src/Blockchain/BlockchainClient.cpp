@@ -6,20 +6,20 @@
 #include "../../include/Blockchain/BlockchainClient.h"
 #include <map>
 
-BlockchainClient::BlockchainClient(NetworkClient * networkClient, const std::map<std::string, std::pair<std::string, std::string>> & initialPeers) : networkClient(networkClient)
+BlockchainClient::BlockchainClient(NetworkClient * networkClient) : networkClient(networkClient)
 {
     this->id = networkClient->getIp(); // temporary solution - TODO: More sophisticated id generation
     networkClient->addPortHandler("8000", [this](NetworkMessage& networkMessage) -> NetworkMessage { return this->MessageHandler(networkMessage); });
-    //DiscoverPeers(initialPeers);
     std::cout << "Blockchain client established" << std::endl;
 }
 
-BlockchainClient::BlockchainClient(NetworkClient * networkClient) : networkClient(networkClient) {
-    this->id = networkClient->getIp(); // temporary solution - TODO: More sophisticated id generation
-    networkClient->addPortHandler("8000", [this](NetworkMessage& networkMessage) -> NetworkMessage { return this->MessageHandler(networkMessage);});
-    DiscoverPeers();
-    std::cout << "Blockchain client established" << std::endl;
-}
+
+//
+//BlockchainClient::BlockchainClient(NetworkClient * networkClient) : networkClient(networkClient) {
+//    this->id = networkClient->getIp(); // temporary solution - TODO: More sophisticated id generation
+//    networkClient->addPortHandler("8000", [this](NetworkMessage& networkMessage) -> NetworkMessage { return this->MessageHandler(networkMessage);});
+//    std::cout << "Blockchain client established" << std::endl;
+//}
 
 void BlockchainClient::MakeTransaction(std::string &receiverId, int amount)
 {
@@ -31,75 +31,66 @@ NetworkMessage BlockchainClient::MessageHandler(NetworkMessage & networkMessage)
 {
     // The purpose of this function will be to route to the desired endpoints (there will be a global collection of
     // endpoint names and their handler functions and this function will route it
+    std::cout << this->networkClient->getIp() << networkMessage.Body() << std::endl;
     json body = networkMessage.Json();
     std::cout << "Blockchain Client nr." << this->id << " received a message " << body["message"] << std::endl;
 
-    NetworkMessage responseMessage(networkMessage.Id(), Response, networkMessage.ReceiverAddress(), networkMessage.SenderAddress(), R"({"message": "hi"})");
+    NetworkMessage responseMessage(networkMessage.Id(), Response, networkMessage.ReceiverAddress(), networkMessage.SenderAddress(), R"({"node_id":")" + this->networkClient->getIp() + "\"}");
     return responseMessage;
 }
 
-//void BlockchainClient::DiscoverPeers(const std::string & initialPeers) {
-//    std::vector<std::string> addressStrings = Utils::SplitString(initialPeers, ' ');
-//    for (auto address : addressStrings) {
-//        Address receiverAddress(peer.first, "8000");
-//        NetworkMessage response = networkClient->SendRequest(receiverAddress, "8000", "1000"); // Need some kind of communication codes for the blockchain
+void BlockchainClient::DiscoverPeers(const std::vector<Address>& initialPeers) {
+    for (const Address &peerAddress: initialPeers) {
+        auto threadFunction = [this, peerAddress]() { this->ConnectPeer(peerAddress); };
+        std::thread recursionThread(threadFunction);
+        recursionThread.join();
+    }
+}
+
+void BlockchainClient::ConnectPeer(const Address & address)
+{
+    std::string jsonLiteral = R"({"nodeid": ")" + this->networkClient->getIp() + R"(", "message":"discovery"})";
+    NetworkMessage response = networkClient->SendRequest(address, "8000", jsonLiteral);
+    json responseJson = response.Json();
+
+    std::string newPeerId = responseJson["node_id"];
+    std::cout << this->networkClient->getIp() << " " << newPeerId << std::endl;
+
+//    peers.insert(std::pair<std::string, Address>(newPeerId, address));
+
+//    json peerAddressJson = responseJson["peer"];
+//    Address peerAddress = Address(peerAddressJson["ip"], peerAddressJson["port"]);
+
+    //    if (this->peers.size() < 2) {
+//        this->ConnectPeer(peerAddress);
+//    }
+}
+
+void BlockchainClient::StartPeerDiscovery(const std::vector<Address>& initialPeers) {
+    DiscoverPeers(initialPeers);
+}
+
+
+//void BlockchainClient::ConnectionEndpointHandler(NetworkMessage & networkMessage) {
+//    bool connected = false;
+//
+//    for (const auto& peer : peers) {
+//        if (peer.second.first == networkMessage.SenderAddress().ip) {
+//            connected = true;
+//        }
 //    }
 //
-//    std::pair<std::string, std::pair<std::string, std::string>> peer = std::pair<std::string, std::pair<std::string, std::string>>("2", std::pair<std::string, std::string>("2", "1"));
-//    peers.insert(peer);
-//    // For now, it's hard-coded - TODO: Add a peer discovery mechanism that works over the network
+//    //TODO: Parse a peer ip and send a connection request to it
+//}
+
+//void BlockchainClient::PeerRequestEndpointHandler(NetworkMessage & networkMessage)
+//{
+//
 //}
 //
-//void BlockchainClient::InitialDiscovery(const std::map<std::string, std::pair<std::string, std::string>> & initialPeers)
-//{
-    // connect with all the initial peers
-    // the initial peers should return their randomly selected peers and those peers should also return some peers
-    // this should repeat to the depth of x
-    // the object keeps receiving new peers until it has y of them
-
-    // This function requests random peer ips from the peers
-    // Then it takes those ips and requests another set of ips
-    // It repeats the cycle until it has x peers
-
-    // The handler function that answers the connect function should return up to x random peers from its peer base
-    // This way we are sure that at least some of those peers are unknown to the Node
-
-    // TODO: Need to implement routing system for the blockchain client, so it's easy to implement endpoints and to
-    // serialize data into JSONs
-    // TODO: Should be a class called Router. Then I can use it for various applications
+//void BlockchainClient::DiscoverPeers() {
+//    std::pair<std::string, std::pair<std::string, std::string>> peer = std::pair<std::string, std::pair<std::string, std::string>>("2", std::pair<std::string, std::string>("2", "1"));
+//    peers.insert(peer);
 //}
-
-void BlockchainClient::ConnectPeer(const std::string& peerId, const Address & address)
-{
-    // It sends the connection request to the peer
-    // If the peer responds with true then
-    // Request other peers from the peer
-}
-
-void BlockchainClient::RequestPeers(const std::string& ip) {
-
-}
-
-void BlockchainClient::ConnectionEndpointHandler(NetworkMessage & networkMessage) {
-    bool connected = false;
-
-    for (const auto& peer : peers) {
-        if (peer.second.first == networkMessage.SenderAddress().ip) {
-            connected = true;
-        }
-    }
-
-    //TODO: Parse a peer ip and send a connection request to it
-}
-
-void BlockchainClient::PeerRequestEndpointHandler(NetworkMessage & networkMessage)
-{
-
-}
-
-void BlockchainClient::DiscoverPeers() {
-    std::pair<std::string, std::pair<std::string, std::string>> peer = std::pair<std::string, std::pair<std::string, std::string>>("2", std::pair<std::string, std::string>("2", "1"));
-    peers.insert(peer);
-}
 
 

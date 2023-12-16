@@ -35,3 +35,7 @@ void Node::transaction(std::string receiverId, int amount)
 void Node::Request() {
     NetworkMessage response = this->networkClient->SendRequest(Address("2", "8000"), "8000", R"({"message": "request1"})");
 }
+
+void Node::BlockchainTest(const std::vector<Address>& initialPeers) {
+    this->blockchainClient->DiscoverPeers(initialPeers);
+}
