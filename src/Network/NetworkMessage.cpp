@@ -6,7 +6,6 @@
 
 NetworkMessage::NetworkMessage(unsigned int id, MessageType type, Address senderAddress, Address receiverAddress, std::string body) : m_id(id), m_messageType(type), m_senderAddress(std::move(senderAddress)), m_receiverAddress(std::move(receiverAddress)), m_body(std::move(body))
 {
-
 }
 
 NetworkMessage::NetworkMessage(unsigned int id, Address senderAddress, Address receiverAddress, std::string body) : m_id(id), m_senderAddress(std::move(senderAddress)), m_receiverAddress(std::move(receiverAddress)), m_body(std::move(body))

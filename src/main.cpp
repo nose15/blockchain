@@ -4,19 +4,23 @@
 #include "Network/Network.cpp"
 #include "Network/NetworkClient.cpp"
 #include "./Node.cpp"
-#include "Blockchain/BlockchainClient.cpp"
-#include "Blockchain/Transaction.cpp"
+#include "./Blockchain/BlockchainClient.cpp"
+#include "./Blockchain/Transaction.cpp"
 #include "Network/PendingRequest.cpp"
 #include "./Utils.cpp"
 #include "Network/NetworkMessage.cpp"
+#include "./Apps/Router.cpp"
 
+// TODO: Get rid of all of these includes
 // TODO: Router for applications
 // TODO: Message parser
-// TODO: RequestTest class that inherits from the NetworkMessage
+// TODO: Request class that inherits from the NetworkMessage
 // TODO: Learn and implement: error handling and tests
 // TODO: Logging system, so it doesn't throw everything to the terminal window
 // TODO: Network message builder
 // TODO: Learn and implement: move enums out of the header files
+
+// TODO: App framework and separation from the network
 
 int main()
 {

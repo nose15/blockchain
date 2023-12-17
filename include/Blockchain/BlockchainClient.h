@@ -6,6 +6,7 @@
 #include <string>
 #include "../Network/NetworkClient.h"
 #include "Transaction.h"
+#include "../Apps/Router.h"
 
 #ifndef BLOCKCHAIN_BLOCKCHAINCLIENT_H
 #define BLOCKCHAIN_BLOCKCHAINCLIENT_H
@@ -16,9 +17,11 @@ private:
     std::map<std::string, Address> peers;
     std::string id;
     NetworkClient * networkClient;
+    Router router;
     void ConnectPeer(const Address & address);
 
     // TODO: Endpoint support for requests
+    json DiscoveryEndpoint(NetworkMessage& networkMessage);
 public:
     BlockchainClient(NetworkClient*);
     void DiscoverPeers(const std::vector<Address>& initialPeers);

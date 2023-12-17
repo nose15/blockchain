@@ -2,7 +2,7 @@
 // Created by lukol on 26.11.2023.
 //
 
-#include "Blockchain/BlockchainClient.h"
+#include "./Blockchain/BlockchainClient.h"
 
 #ifndef BLOCKCHAIN_NODE_H
 #define BLOCKCHAIN_NODE_H

@@ -10,6 +10,7 @@ BlockchainClient::BlockchainClient(NetworkClient * networkClient) : networkClien
 {
     this->id = networkClient->getIp(); // TODO: More sophisticated id generation
     // TODO: Improve ports flexibility (allow for the ports to be assigned automatically)
+    router.AddEndpoint("/", [this](NetworkMessage &networkMessage) -> json { return this->DiscoveryEndpoint(networkMessage); });
     networkClient->AddPortHandler("8000", [this](NetworkMessage &networkMessage) -> NetworkMessage {
         return this->MessageHandler(networkMessage);
     });
@@ -25,11 +26,9 @@ void BlockchainClient::MakeTransaction(std::string &receiverId, int amount)
 NetworkMessage BlockchainClient::MessageHandler(NetworkMessage & networkMessage)
 {
     // TODO: Router for endpoints
-    std::cout << this->networkClient->getIp() << networkMessage.Body() << std::endl;
-    json message = networkMessage.Json();
-    std::cout << "Blockchain Client nr." << this->id << " received a message " << message["message"] << std::endl;
-
-    NetworkMessage responseMessage(networkMessage.Id(), Response, networkMessage.ReceiverAddress(), networkMessage.SenderAddress(), R"({"node_id":")" + this->networkClient->getIp() + "\"}");
+    std::function<json(NetworkMessage&)> endpointHandler = router.Dispatch(networkMessage.EndPoint());
+    json responseBody = endpointHandler(networkMessage);
+    NetworkMessage responseMessage(networkMessage.Id(), Response, networkMessage.ReceiverAddress(), networkMessage.SenderAddress(), responseBody);
     return responseMessage;
 }
 
@@ -45,8 +44,10 @@ void BlockchainClient::DiscoverPeers(const std::vector<Address>& initialPeers) {
 
 void BlockchainClient::ConnectPeer(const Address & address)
 {
-    std::string jsonLiteral = R"({"nodeid": ")" + this->networkClient->getIp() + R"(", "message":"discovery"})";
+    json jsonMessage = {{"node_id", this->id}, {"message", "discovery"}};
+    std::string jsonLiteral = jsonMessage.dump();
     NetworkMessage response = networkClient->SendRequest(address, "8000", jsonLiteral);
+    std::cout << response.Body() << std::endl;
     json responseJson = response.Json();
 
     std::string newPeerId = responseJson["node_id"];
@@ -59,4 +60,19 @@ void BlockchainClient::ConnectPeer(const Address & address)
 //    if (this->peers.size() < 2) {
 //        this->ConnectPeer(peerAddress);
 //    }
+}
+
+// Temporarily they are here but will migrate them into a separate app framework
+json BlockchainClient::DiscoveryEndpoint(NetworkMessage& networkMessage) {
+    std::cout << "Blockchain Client nr." << this->id << "endpoint \"/discovery\" received a message " << std::endl;
+    std::cout << networkMessage.Body() << std::endl;
+
+    json content = networkMessage.Json();
+    json responseMessage;
+
+    if (content["message"] == "discovery") {
+        responseMessage.push_back({"node_id", this->id});
+    }
+
+    return responseMessage;
 }
