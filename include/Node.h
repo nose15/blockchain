@@ -17,9 +17,9 @@ public:
     Node(std::string, Network * network);
     std::string getId();
     void Ping(const Address & receiverAddress);
-    void transaction(std::string, int);
-    void Request();
+    void RequestTest();
     void BlockchainTest(const std::vector<Address>& initialPeers);
+    void BlockchainTransactionTest(std::string receiverId, int amount);
 };
 
 #endif //BLOCKCHAIN_NODE_H

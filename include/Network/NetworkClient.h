@@ -21,15 +21,18 @@ private:
     std::map<std::string, std::function<NetworkMessage(NetworkMessage&)>> portHandlers;
     NetworkMessage currentResponse;
 
+    void RequestHandler(NetworkMessage &);
     void ResponseHandler(NetworkMessage &);
 public:
     NetworkClient(std::string, Network*);
-    const std::string& getIp();
-    void BroadcastMessage(const std::string &message);
-    void MessageHandler(NetworkMessage&);
-    void disconnect();
-    void addPortHandler(const std::string& port, const std::function<NetworkMessage(NetworkMessage&)>&);
     NetworkMessage SendRequest(const Address & receiverAddress, const std::string & responsePort, const std::string &);
+    void MessageHandler(NetworkMessage&);
+    void BroadcastMessage(const std::string &message);
+    void disconnect();
+
+    void AddPortHandler(const std::string& port, const std::function<NetworkMessage(NetworkMessage&)>&);
+
+    const std::string& getIp();
 };
 
 

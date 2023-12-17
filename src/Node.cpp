@@ -26,16 +26,15 @@ void Node::Ping(const Address & receiverAddress)
     std::cout << this->m_id << " ping " << receiverAddress.ip << ":" << receiverAddress.port << " => " << body["message"] << std::endl;
 }
 
-
-void Node::transaction(std::string receiverId, int amount)
-{
-    blockchainClient->MakeTransaction(receiverId, amount);
-}
-
-void Node::Request() {
+void Node::RequestTest() {
     NetworkMessage response = this->networkClient->SendRequest(Address("2", "8000"), "8000", R"({"message": "request1"})");
 }
 
 void Node::BlockchainTest(const std::vector<Address>& initialPeers) {
     this->blockchainClient->DiscoverPeers(initialPeers);
+}
+
+void Node::BlockchainTransactionTest(std::string receiverId, int amount)
+{
+    blockchainClient->MakeTransaction(receiverId, amount);
 }

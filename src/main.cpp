@@ -11,7 +11,12 @@
 #include "Network/NetworkMessage.cpp"
 
 // TODO: Router for applications
-// TODO: Message parser - JSON like object with a possibility to serialize it into a string
+// TODO: Message parser
+// TODO: RequestTest class that inherits from the NetworkMessage
+// TODO: Learn and implement: error handling and tests
+// TODO: Logging system, so it doesn't throw everything to the terminal window
+// TODO: Network message builder
+// TODO: Learn and implement: move enums out of the header files
 
 int main()
 {
@@ -27,11 +32,6 @@ int main()
     Node node1("1", &network);
     Node node2("2", &network);
     Node node3("3", &network);
-//
-//    node1.Ping(Address("2", "8000"));
-//    node1.transaction("2", 10);
-//
-//    node1.Request();
 
     node1.BlockchainTest(addresses1);
     node2.BlockchainTest(addresses2);

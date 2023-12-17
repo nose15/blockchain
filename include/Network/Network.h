@@ -21,7 +21,7 @@ private:
     std::map<std::string, std::function<void(NetworkMessage)>> connected;
     std::stack<std::string> availableIps;
 
-    void triggerTraffic();
+    void TriggerReceiver();
     std::string acquireIp();
 public:
     Network();

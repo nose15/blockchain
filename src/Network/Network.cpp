@@ -20,7 +20,7 @@ std::string Network::acquireIp()
 }
 
 
-void Network::triggerTraffic()
+void Network::TriggerReceiver()
 {
     if (current_traffic.ReceiverAddress().ip == "0")
     {
@@ -45,7 +45,7 @@ void Network::triggerTraffic()
 void Network::SendMessage(const NetworkMessage & networkMessage)
 {
     this->current_traffic = networkMessage;
-    this->triggerTraffic();
+    this->TriggerReceiver();
 }
 
 std::string Network::connect(const std::function<void(NetworkMessage)>& handler) {
