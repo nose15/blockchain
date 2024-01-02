@@ -1,2 +1,2 @@
 # blockchain
-First version of my blockchain, probably pretty shitty
+Network simulation that allows for simple node objects to communicate with each other.
