@@ -112,8 +112,3 @@ void NetworkClient::disconnect() {
 const std::string& NetworkClient::getIp() { return this->m_ipAddress; }
 
 
-
-
-
-
-

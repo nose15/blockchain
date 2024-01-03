@@ -38,3 +38,4 @@ void Node::BlockchainTransactionTest(std::string receiverId, int amount)
 {
     blockchainClient->MakeTransaction(receiverId, amount);
 }
+
