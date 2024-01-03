@@ -7,4 +7,4 @@ project(Blockchain)
 set(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 # Add source files
 file(GLOB_RECURSE SOURCE_FILES ${SOURCE_DIR}/*.cpp)
-add_executable(blockchainexec ${SOURCE_FILES})
+add_executable(blockchain ${SOURCE_FILES})

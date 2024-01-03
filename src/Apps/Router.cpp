@@ -18,3 +18,5 @@ std::function<json(NetworkMessage &)> &Router::Dispatch(const std::string& endpo
 void Router::AddEndpoint(std::string path, std::function<json(NetworkMessage &)> handler) {
     m_endpoints.insert(std::pair<std::string, std::function<json(NetworkMessage &)>>(path, handler));
 }
+
+

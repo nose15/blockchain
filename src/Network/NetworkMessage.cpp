@@ -46,4 +46,3 @@ Address NetworkMessage::ReceiverAddress()
 {
     return this->m_receiverAddress;
 }
-
