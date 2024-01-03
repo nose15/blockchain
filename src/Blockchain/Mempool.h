@@ -3,11 +3,11 @@
 //
 
 #include <vector>
+#include "Transaction.h"
 
 #ifndef BLOCKCHAIN_MEMPOOL_H
 #define BLOCKCHAIN_MEMPOOL_H
 
-#include "Transaction.h"
 
 class Mempool {
 private:

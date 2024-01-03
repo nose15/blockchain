@@ -2,7 +2,7 @@
 // Created by lukol on 04.12.2023.
 //
 
-#include "../../include/Blockchain/Mempool.h"
+#include "Mempool.h"
 
 
 Mempool::Mempool() = default;

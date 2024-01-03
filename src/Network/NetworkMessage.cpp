@@ -2,7 +2,7 @@
 // Created by lukasz on 15.12.23.
 //
 
-#include "../../include/Network/NetworkMessage.h"
+#include "NetworkMessage.h"
 
 NetworkMessage::NetworkMessage(unsigned int id, MessageType type, Address senderAddress, Address receiverAddress, std::string body) : m_id(id), m_messageType(type), m_senderAddress(std::move(senderAddress)), m_receiverAddress(std::move(receiverAddress)), m_body(std::move(body))
 {

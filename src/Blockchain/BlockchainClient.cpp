@@ -2,9 +2,7 @@
 // Created by lukasz on 02.12.23.
 //
 
-#include <string>
-#include "../../include/Blockchain/BlockchainClient.h"
-#include <map>
+#include "BlockchainClient.h"
 
 BlockchainClient::BlockchainClient(NetworkClient * networkClient) : networkClient(networkClient)
 {

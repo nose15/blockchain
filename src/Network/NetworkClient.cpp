@@ -6,7 +6,7 @@
 #include <string>
 #include <utility>
 
-#include "../../include/Network/NetworkClient.h"
+#include "NetworkClient.h"
 
 
 NetworkClient::NetworkClient(std::string nodeId, Network * network) : nodeId(std::move(nodeId)), network(network)

@@ -2,11 +2,11 @@
 // Created by lukasz on 03.12.23.
 //
 
-#include "../Structs/Address.h"
 #include <string>
 #include <utility>
 #include <random>
-#include "../external/nlohmann/json.hpp"
+#include "../Address.h"
+#include "../../external/nlohmann/json.hpp"
 using json = nlohmann::json;
 
 #ifndef BLOCKCHAIN_NETWORKMESSAGE_H
@@ -21,6 +21,7 @@ enum MessageType {
 
 
 class NetworkMessage {
+private:
     unsigned int m_id = 0;
     Address m_senderAddress = Address("0", "0");
     Address m_receiverAddress = Address("0", "0");

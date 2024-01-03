@@ -4,8 +4,8 @@
 
 #include <map>
 #include <string>
-#include "../Network/NetworkClient.h"
 #include "Transaction.h"
+#include "../Network/NetworkClient.h"
 #include "../Apps/Router.h"
 
 #ifndef BLOCKCHAIN_BLOCKCHAINCLIENT_H

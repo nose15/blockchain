@@ -2,7 +2,7 @@
 // Created by lukol on 26.11.2023.
 //
 
-#include "../include/Node.h"
+#include "Node.h"
 
 Node::Node(std::string id, Network * network) : m_id(std::move(id))
 {

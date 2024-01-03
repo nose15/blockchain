@@ -1,15 +1,19 @@
 //
 // Created by lukol on 26.11.2023.
 //
-#include "Network/Network.cpp"
-#include "Network/NetworkClient.cpp"
-#include "./Node.cpp"
-#include "./Blockchain/BlockchainClient.cpp"
-#include "./Blockchain/Transaction.cpp"
-#include "Network/PendingRequest.cpp"
-#include "./Utils.cpp"
-#include "Network/NetworkMessage.cpp"
-#include "./Apps/Router.cpp"
+//#include "Network/Network.cpp"
+#include "Network/Network.h"
+//#include "Network/NetworkClient.cpp"
+#include "Network/NetworkClient.h"
+//#include "Node/Node.cpp"
+#include "Node/Node.h"
+
+//#include "./Blockchain/BlockchainClient.cpp"
+//#include "./Blockchain/Transaction.cpp"
+//#include "Network/PendingRequest.cpp"
+//#include "Utils/Utils.cpp"
+//#include "Network/NetworkMessage.cpp"
+//#include "./Apps/Router.cpp"
 
 // TODO: Get rid of all of these includes
 // TODO: Router for applications

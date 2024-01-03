@@ -2,10 +2,10 @@
 // Created by lukol on 29.11.2023.
 //
 
-#include "../Structs/Address.h"
-#include "./Network.h"
-#include "./PendingRequest.h"
-#include "../Utils.h"
+#include "Network.h"
+#include "PendingRequest.h"
+#include "../Address.h"
+#include "../Utils/Utils.h"
 #include <future>
 
 #ifndef BLOCKCHAIN_NETWORKCLIENT_H

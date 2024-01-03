@@ -2,7 +2,7 @@
 // Created by lukol on 26.11.2023.
 //
 
-#include "../../include/Network/Network.h"
+#include "Network.h"
 
 Network::Network()
 {

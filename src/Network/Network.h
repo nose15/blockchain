@@ -6,7 +6,6 @@
 #include <map>
 #include <iostream>
 #include <list>
-#include <iostream>
 #include <functional>
 #include <stack>
 #include "NetworkMessage.h"
