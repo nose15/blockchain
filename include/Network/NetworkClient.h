@@ -1,0 +1,8 @@
+//
+// Created by lukasz on 03.01.24.
+//
+
+#ifndef BLOCKCHAIN_NETWORKCLIENT_H
+#define BLOCKCHAIN_NETWORKCLIENT_H
+
+#endif //BLOCKCHAIN_NETWORKCLIENT_H
