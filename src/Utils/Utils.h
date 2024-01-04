@@ -11,7 +11,7 @@ class Utils {
 public:
     static unsigned int generateRandomId();
 
-    static std::vector<std::string> SplitString(const std::string& str, char separator);
+    static std::vector<std::string> SplitString(const std::string& str, char separator, uint32_t target_count);
 };
 
 

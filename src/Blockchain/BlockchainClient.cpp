@@ -3,12 +3,15 @@
 //
 
 #include "BlockchainClient.h"
+#include "../DataParser/DataParser.h"
 
 BlockchainClient::BlockchainClient(NetworkClient * networkClient) : networkClient(networkClient)
 {
-    this->id = networkClient->getIp(); // TODO: More sophisticated id generation
+    this->id = networkClient->getIp();
+    // TODO: More sophisticated id generation
     // TODO: Improve ports flexibility (allow for the ports to be assigned automatically)
-    router.AddEndpoint("/", [this](NetworkMessage &networkMessage) -> json { return this->DiscoveryEndpoint(networkMessage); });
+
+    router.AddEndpoint("/discovery", [this](NetworkMessage &networkMessage) -> json { return this->DiscoveryEndpoint(networkMessage); });
     networkClient->AddPortHandler("8000", [this](NetworkMessage &networkMessage) -> NetworkMessage {
         return this->MessageHandler(networkMessage);
     });
@@ -24,18 +27,15 @@ void BlockchainClient::MakeTransaction(std::string &receiverId, int amount)
 NetworkMessage BlockchainClient::MessageHandler(NetworkMessage & networkMessage)
 {
     // TODO: Router for endpoints
-    std::function<json(NetworkMessage&)> endpointHandler = router.Dispatch(networkMessage.EndPoint());
+    std::function<json(NetworkMessage&)> endpointHandler = router.Dispatch(networkMessage.Body());
     json responseBody = endpointHandler(networkMessage);
-    NetworkMessage responseMessage(networkMessage.Id(), Response, networkMessage.ReceiverAddress(), networkMessage.SenderAddress(), responseBody);
+    NetworkMessage responseMessage(networkMessage.Id(), Response, networkMessage.ReceiverAddress(), networkMessage.SenderAddress(), responseBody.dump());
     return responseMessage;
 }
 
 void BlockchainClient::DiscoverPeers(const std::vector<Address>& initialPeers) {
     for (const Address &peerAddress: initialPeers) {
-        auto threadFunction = [this, peerAddress]() { this->ConnectPeer(peerAddress); };
-        std::thread recursionThread(threadFunction);
-        recursionThread.join();
-
+        networkClient->SendRequest(peerAddress, "8000", R"(GET /discovery {"message": "discovery"})");
         // TODO: Figure out a way to multiple threads working on different peer chains
     }
 }
@@ -62,14 +62,14 @@ void BlockchainClient::ConnectPeer(const Address & address)
 
 // Temporarily they are here but will migrate them into a separate app framework
 json BlockchainClient::DiscoveryEndpoint(NetworkMessage& networkMessage) {
-    std::cout << "Blockchain Client nr." << this->id << "endpoint \"/discovery\" received a message " << std::endl;
-    std::cout << networkMessage.Body() << std::endl;
-
-    json content = networkMessage.Json();
+    std::string method = DataParser::FetchMethod(networkMessage.Body());
+    std::cout << "Blockchain Client nr." << this->id << "/discovery received a " << method << " message " << std::endl;
+    std::string contentStr = DataParser::FetchContent(networkMessage.Body());
+    json content = json::parse(contentStr);
     json responseMessage;
 
     if (content["message"] == "discovery") {
-        responseMessage.push_back({"node_id", this->id});
+        responseMessage["node_id"] = this->id;
     }
 
     return responseMessage;

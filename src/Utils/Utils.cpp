@@ -3,6 +3,7 @@
 //
 
 #include "Utils.h"
+#include <iostream>
 
 unsigned int Utils::generateRandomId()
 {
@@ -16,15 +17,17 @@ unsigned int Utils::generateRandomId()
     return dis(gen);
 }
 
-std::vector<std::string> Utils::SplitString(const std::string& str, char separator) {
+std::vector<std::string> Utils::SplitString(const std::string& str, char separator, uint32_t target_count = 0) {
+    uint32_t count = target_count;
     std::vector<std::string> result = {};
 
     std::string currentString;
     for (char currentChar: str)
     {
-        if (currentChar == separator) {
+        if (currentChar == separator && count != 0) {
             result.push_back(currentString);
             currentString = "";
+            count--;
             continue;
         }
 

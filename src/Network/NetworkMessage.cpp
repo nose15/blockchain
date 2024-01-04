@@ -27,10 +27,6 @@ json NetworkMessage::Json() {
     return json::parse(this->m_body);
 }
 
-std::string NetworkMessage::EndPoint()
-{
-    return this->m_endpoint;
-}
 
 MessageType NetworkMessage::Type()
 {
