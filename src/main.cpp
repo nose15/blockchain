@@ -6,8 +6,6 @@
 #include "Node/Node.h"
 
 // TODO: Separate public from private headers so all the components can be more independent
-// TODO: Router for applications
-// TODO: Message parser
 // TODO: Request class that inherits from the NetworkMessage
 // TODO: Learn and implement: error handling and tests
 // TODO: Logging system, so it doesn't throw everything to the terminal window
@@ -19,21 +17,33 @@
 int main()
 {
     Network network;
-    Address address1("1", "8000");
-    Address address2("2", "8000");
-    Address address3("3", "8000");
 
-    std::vector<Address> addresses1 = {address2, address3};
-    std::vector<Address> addresses2 = {address1, address3};
-    std::vector<Address> addresses3 = {address1, address2};
+    // create initial peers
+    // create peers and connect them to the initial peers
 
-    Node node1("1", &network);
-    Node node2("2", &network);
-    Node node3("3", &network);
+    std::vector<Node> initialNodes;
 
-    node1.BlockchainTest(addresses1);
-    node2.BlockchainTest(addresses2);
-    node3.BlockchainTest(addresses3);
+    for (int i = 0; i < 5; i++)
+    {
+        initialNodes.emplace_back(std::to_string(i), &network);
+    }
+
+    for (int i = 5; i < 50; i++)
+    {
+        Node node(std::to_string(i), &network);
+        Address address(initialNodes[i % 5].networkClient->getIp(), "8000");
+        std::vector<Address> addresses = {address};
+        node.blockchainClient->DiscoverPeers(addresses);
+    }
+
+    std::cout << std::endl;
+    for (Node node : initialNodes){
+        std::cout << "Node " << node.getId() << ": ";
+        Utils::PrintMap(node.blockchainClient->peers);
+        std::cout << std::endl;
+    }
+
+
 
     return 0;
 }

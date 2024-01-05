@@ -3,7 +3,6 @@
 //
 
 #include "Utils.h"
-#include <iostream>
 
 unsigned int Utils::generateRandomId()
 {
@@ -40,4 +39,12 @@ std::vector<std::string> Utils::SplitString(const std::string& str, char separat
     }
 
     return result;
+}
+
+void Utils::PrintMap(const std::map<std::string, Address>& peerMap) {
+    for (const auto &pair : peerMap) {
+        std::cout << pair.first << " " << pair.second.ip << ":" << pair.second.port << "; ";
+    }
+
+    std::cout << std::endl;
 }

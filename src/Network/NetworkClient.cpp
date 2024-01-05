@@ -31,7 +31,7 @@ NetworkMessage NetworkClient::SendRequest(const Address & receiverAddress, const
     return response;
 }
 
-// TODO: Probably will have to invert the handling process. First handle the port and then the message type
+// Probably will have to invert the handling process. First handle the port and then the message type
 void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
 {
     switch (networkMessage.Type()) {

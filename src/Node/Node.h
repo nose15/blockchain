@@ -11,9 +11,9 @@ class Node
 {
 private:
     std::string m_id;
+public:
     NetworkClient * networkClient;
     BlockchainClient * blockchainClient;
-public:
     Node(std::string, Network * network);
     std::string getId();
     void Ping(const Address & receiverAddress);

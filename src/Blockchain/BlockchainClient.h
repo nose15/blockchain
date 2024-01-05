@@ -14,15 +14,15 @@
 
 class BlockchainClient {
 private:
-    std::map<std::string, Address> peers;
     std::string id;
     NetworkClient * networkClient;
     Router router;
     void ConnectPeer(const Address & address);
 
-    // TODO: Endpoint support for requests
-    json DiscoveryEndpoint(NetworkMessage& networkMessage);
+    json DiscoveryEndpoint(NetworkMessage &networkMessage);
+    json ConnectEndpoint(NetworkMessage &networkMessage);
 public:
+    std::map<std::string, Address> peers;
     BlockchainClient(NetworkClient*);
     void DiscoverPeers(const std::vector<Address>& initialPeers);
     void MakeTransaction(std::string&, int);

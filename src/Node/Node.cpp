@@ -8,7 +8,6 @@ Node::Node(std::string id, Network * network) : m_id(std::move(id))
 {
     std::cout << "Node " << m_id << " created" << std::endl;
     this->networkClient = new NetworkClient(this->m_id, network);
-    // TODO: Update so it gets initial peers
     this->blockchainClient = new BlockchainClient(networkClient);
 }
 
