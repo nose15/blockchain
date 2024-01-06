@@ -11,7 +11,7 @@
 
 NetworkClient::NetworkClient(std::string nodeId, Network * network) : nodeId(std::move(nodeId)), network(network)
 {
-    this->m_ipAddress = network->connect([this](NetworkMessage networkMessage) { this->MessageHandler(networkMessage);});
+    this->ipAddress = network->connect([this](NetworkMessage networkMessage) { this->MessageHandler(networkMessage);});
     std::cout << "NetworkClient for " << this->nodeId << " established" << std::endl;
 }
 
@@ -22,9 +22,9 @@ NetworkMessage NetworkClient::SendRequest(const Address & receiverAddress, const
     unsigned int requestId = Utils::generateRandomId();
 
     PendingRequest pendingRequest(requestId, responseFuture, pendingResponse);
-    m_pendingRequests.push_back(pendingRequest);
+    pendingRequests.push_back(pendingRequest);
 
-    NetworkMessage networkMessage(requestId, Request, Address(m_ipAddress, responsePort), receiverAddress, message);
+    NetworkMessage networkMessage(requestId, Request, Address(ipAddress, responsePort), receiverAddress, message);
     this->network->SendMessage(networkMessage);
     NetworkMessage response = responseFuture.get();
 
@@ -76,7 +76,7 @@ void NetworkClient::ResponseHandler(NetworkMessage & networkMessage)
         return;
     }
 
-    for (auto pendingRequest : this->m_pendingRequests)
+    for (auto pendingRequest : this->pendingRequests)
     {
         if (pendingRequest.GetId() == networkMessage.Id())
         {
@@ -99,17 +99,17 @@ void NetworkClient::BroadcastMessage(const std::string& message)
 {
     //TODO: Add NetworkMessageFactory
     unsigned int id = Utils::generateRandomId();
-    NetworkMessage networkMessage(id, Broadcast, Address(m_ipAddress, "0"), Address("0", "0"), message);
+    NetworkMessage networkMessage(id, Broadcast, Address(ipAddress, "0"), Address("0", "0"), message);
     network->SendMessage(networkMessage);
 }
 
 void NetworkClient::disconnect() {
-    this->network->disconnect(this->m_ipAddress);
+    this->network->disconnect(this->ipAddress);
     this->network = nullptr;
 } // TODO: Connect method, so the client can be reused
 
 
-const std::string& NetworkClient::getIp() { return this->m_ipAddress; }
+const std::string& NetworkClient::getIp() { return this->ipAddress; }
 
 
 

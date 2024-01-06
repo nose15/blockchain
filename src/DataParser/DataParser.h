@@ -10,7 +10,6 @@
 
 
 class DataParser {
-private:
 public:
     DataParser() = delete;
     static std::string FetchEndpoint(const std::string& messageBody);

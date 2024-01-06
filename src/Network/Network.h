@@ -25,6 +25,7 @@ private:
 public:
     Network();
     void SendMessage(const NetworkMessage & networkMessage);
+
     std::string connect(const std::function<void(NetworkMessage)>&);
     void disconnect(const std::string&);
 };

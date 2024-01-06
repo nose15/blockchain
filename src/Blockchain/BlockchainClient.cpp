@@ -7,16 +7,18 @@
 
 BlockchainClient::BlockchainClient(NetworkClient * networkClient) : networkClient(networkClient)
 {
-    this->id = networkClient->getIp();
     // TODO: More sophisticated id generation
     // TODO: Improve ports flexibility (allow for the ports to be assigned automatically)
 
-    router.AddEndpoint("/discovery", [this](NetworkMessage &networkMessage) -> json { return this->DiscoveryEndpoint(networkMessage); });
-    router.AddEndpoint("/connect", [this](NetworkMessage &networkMessage) -> json { return this->ConnectEndpoint(networkMessage); });
+    this->id = networkClient->getIp();
 
     networkClient->AddPortHandler("8000", [this](NetworkMessage &networkMessage) -> NetworkMessage {
         return this->MessageHandler(networkMessage);
     });
+
+    router.AddEndpoint("/discovery", [this](NetworkMessage &networkMessage) -> json { return this->DiscoveryEndpoint(networkMessage); });
+    router.AddEndpoint("/connect", [this](NetworkMessage &networkMessage) -> json { return this->ConnectEndpoint(networkMessage); });
+
     std::cout << "Blockchain client established" << std::endl;
 }
 
@@ -54,26 +56,6 @@ void BlockchainClient::DiscoverPeers(const std::vector<Address>& initialPeers) {
         }
         Utils::PrintMap(peers);
     }
-}
-
-void BlockchainClient::ConnectPeer(const Address & address)
-{
-    json jsonMessage = {{"node_id", this->id}, {"message", "discovery"}};
-    std::string jsonLiteral = jsonMessage.dump();
-    NetworkMessage response = networkClient->SendRequest(address, "8000", jsonLiteral);
-    std::cout << response.Body() << std::endl;
-    json responseJson = response.Json();
-
-    std::string newPeerId = responseJson["node_id"];
-    std::cout << this->networkClient->getIp() << " " << newPeerId << std::endl;
-
-//    peers.insert(std::pair<std::string, Address>(newPeerId, address));
-//    json peerAddressJson = responseJson["peer"];
-//    Address peerAddress = Address(peerAddressJson["ip"], peerAddressJson["port"]);
-//
-//    if (this->peers.size() < 2) {
-//        this->ConnectPeer(peerAddress);
-//    }
 }
 
 // Temporarily they are here but will migrate them into a separate app framework

@@ -4,16 +4,16 @@
 
 #include "Node.h"
 
-Node::Node(std::string id, Network * network) : m_id(std::move(id))
+Node::Node(std::string id, Network * network) : id(std::move(id))
 {
-    std::cout << "Node " << m_id << " created" << std::endl;
-    this->networkClient = new NetworkClient(this->m_id, network);
+    std::cout << "Node " << id << " created" << std::endl;
+    this->networkClient = new NetworkClient(this->id, network);
     this->blockchainClient = new BlockchainClient(networkClient);
 }
 
 std::string Node::getId()
 {
-    return m_id;
+    return id;
 }
 
 
@@ -22,7 +22,7 @@ void Node::Ping(const Address & receiverAddress)
 {
     NetworkMessage response = networkClient->SendRequest(receiverAddress, "8000", R"({"message": "ping"})");
     json body = response.Json();
-    std::cout << this->m_id << " ping " << receiverAddress.ip << ":" << receiverAddress.port << " => " << body["message"] << std::endl;
+    std::cout << this->id << " ping " << receiverAddress.ip << ":" << receiverAddress.port << " => " << body["message"] << std::endl;
 }
 
 void Node::RequestTest() {

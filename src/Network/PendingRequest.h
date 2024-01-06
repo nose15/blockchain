@@ -19,7 +19,6 @@ class PendingRequest {
 private:
     Status status;
     unsigned int id;
-    std::future<NetworkMessage> & responseRef;
     std::promise<NetworkMessage> & responsePromise;
 public:
     PendingRequest(unsigned int id, std::future<NetworkMessage> & responseFuture, std::promise<NetworkMessage> & responsePromise);

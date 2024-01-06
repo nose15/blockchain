@@ -14,8 +14,8 @@
 class NetworkClient {
 private:
     std::string nodeId;
-    std::string m_ipAddress;
-    std::vector<PendingRequest> m_pendingRequests;
+    std::string ipAddress;
+    std::vector<PendingRequest> pendingRequests;
 
     Network * network;
     std::map<std::string, std::function<NetworkMessage(NetworkMessage&)>> portHandlers;
@@ -25,12 +25,12 @@ private:
     void ResponseHandler(NetworkMessage &);
 public:
     NetworkClient(std::string, Network*);
-    NetworkMessage SendRequest(const Address & receiverAddress, const std::string & responsePort, const std::string &);
+    void AddPortHandler(const std::string& port, const std::function<NetworkMessage(NetworkMessage&)>&);
     void MessageHandler(NetworkMessage&);
+
+    NetworkMessage SendRequest(const Address & receiverAddress, const std::string & responsePort, const std::string &);
     void BroadcastMessage(const std::string &message);
     void disconnect();
-
-    void AddPortHandler(const std::string& port, const std::function<NetworkMessage(NetworkMessage&)>&);
 
     const std::string& getIp();
 };

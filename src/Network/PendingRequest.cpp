@@ -4,7 +4,7 @@
 
 #include "PendingRequest.h"
 
-PendingRequest::PendingRequest(unsigned int id, std::future<NetworkMessage> & responseRef, std::promise<NetworkMessage> & responsePromise) : responseRef(responseRef), responsePromise(responsePromise) {
+PendingRequest::PendingRequest(unsigned int id, std::future<NetworkMessage> & responseRef, std::promise<NetworkMessage> & responsePromise) : responsePromise(responsePromise) {
     this->id = id;
     this->status = pending;
 }
