@@ -13,6 +13,10 @@ Network::Network()
 
 std::string Network::acquireIp()
 {
+    if (availableIps.empty()) {
+        throw std::runtime_error("The network is full");
+    }
+
     std::string ipAddress = availableIps.top();
     availableIps.pop();
 
@@ -28,7 +32,6 @@ void Network::TriggerReceiver()
         {
             connection.second(current_traffic);
         }
-
         return;
     }
 
@@ -37,22 +40,32 @@ void Network::TriggerReceiver()
     {
         std::cout << "" << std::endl;
         receiver->second(current_traffic);
-
+        return;
     }
+
+    throw std::runtime_error("Host " + current_traffic.ReceiverAddress().ip + " not found.");
 }
 
 
 void Network::SendMessage(const NetworkMessage & networkMessage)
 {
-    this->current_traffic = networkMessage;
-    this->TriggerReceiver();
+    try {
+        this->current_traffic = networkMessage;
+        this->TriggerReceiver();
+    } catch (std::runtime_error& error) {
+        throw std::runtime_error("Message could not be send - " + (std::string)error.what());
+    }
 }
 
 std::string Network::connect(const std::function<void(NetworkMessage)>& handler) {
-    std::string ipAddress = this->acquireIp();
-    std::pair<std::string, std::function<void(NetworkMessage)>> handlerPair(ipAddress, handler);
-    connected.insert(handlerPair);
-    return ipAddress;
+    try {
+        std::string ipAddress = this->acquireIp();
+        std::pair<std::string, std::function<void(NetworkMessage)>> handlerPair(ipAddress, handler);
+        connected.insert(handlerPair);
+        return ipAddress;
+    } catch (std::runtime_error& error) {
+        throw std::runtime_error("Unable to connect - " + (std::string)error.what());
+    }
 }
 
 void Network::disconnect(const std::string &ipAddress)

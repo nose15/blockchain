@@ -21,7 +21,7 @@ private:
     std::map<std::string, std::function<NetworkMessage(NetworkMessage&)>> portHandlers;
     NetworkMessage currentResponse;
 
-    void RequestHandler(NetworkMessage &);
+    NetworkMessage&& RequestHandler(NetworkMessage &);
     void ResponseHandler(NetworkMessage &);
 public:
     NetworkClient(std::string, Network*);

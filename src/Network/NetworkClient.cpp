@@ -11,8 +11,12 @@
 
 NetworkClient::NetworkClient(std::string nodeId, Network * network) : nodeId(std::move(nodeId)), network(network)
 {
-    this->ipAddress = network->connect([this](NetworkMessage networkMessage) { this->MessageHandler(networkMessage);});
-    std::cout << "NetworkClient for " << this->nodeId << " established" << std::endl;
+    try {
+        this->ipAddress = network->connect([this](NetworkMessage networkMessage) { this->MessageHandler(networkMessage);});
+        std::cout << "NetworkClient for " << this->nodeId << " established" << std::endl;
+    } catch (std::runtime_error& error) {
+        throw std::runtime_error("Network Client could not be established (" + (std::string)error.what() + ")");
+    }
 }
 
 NetworkMessage NetworkClient::SendRequest(const Address & receiverAddress, const std::string & responsePort, const std::string &message)
@@ -25,10 +29,14 @@ NetworkMessage NetworkClient::SendRequest(const Address & receiverAddress, const
     pendingRequests.push_back(pendingRequest);
 
     NetworkMessage networkMessage(requestId, Request, Address(ipAddress, responsePort), receiverAddress, message);
-    this->network->SendMessage(networkMessage);
-    NetworkMessage response = responseFuture.get();
 
-    return response;
+    try {
+        this->network->SendMessage(networkMessage);
+        NetworkMessage response = responseFuture.get();
+        return response;
+    } catch (std::runtime_error& error) {
+        throw std::runtime_error("Request failed (" + (std::string)error.what() + ")");
+    }
 }
 
 // Probably will have to invert the handling process. First handle the port and then the message type
@@ -40,7 +48,11 @@ void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
             break;
         }
         case Request: {
-            RequestHandler(networkMessage);
+            try {
+                network->SendMessage(RequestHandler(networkMessage));
+            } catch (std::runtime_error& error) {
+                throw std::runtime_error("Could not send message - " + (std::string)error.what());
+            }
             break;
         }
         case Broadcast: {
@@ -53,7 +65,7 @@ void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
     }
 }
 
-void NetworkClient::RequestHandler(NetworkMessage & networkMessage) {
+NetworkMessage&& NetworkClient::RequestHandler(NetworkMessage & networkMessage) {
     if (networkMessage.Type() != Request) {
         throw std::runtime_error("Invalid message type - should be \"Request\"");
     }
@@ -62,10 +74,9 @@ void NetworkClient::RequestHandler(NetworkMessage & networkMessage) {
 
     try {
         std::function<NetworkMessage(NetworkMessage &)> portHandler = portHandlers[port];
-        NetworkMessage response = portHandler(networkMessage);
-        network->SendMessage(response);
+        return std::move(portHandler(networkMessage));
     } catch (const std::bad_function_call & e) {
-        throw std::runtime_error("The port " + port + " doesn't have a handler");
+        return NetworkMessage(networkMessage.Id(), Response, Address(this->ipAddress, networkMessage.ReceiverAddress().port), networkMessage.SenderAddress(), "404");
     }
 }
 
@@ -82,9 +93,11 @@ void NetworkClient::ResponseHandler(NetworkMessage & networkMessage)
         if (pendingRequest.GetId() == networkMessage.Id())
         {
             pendingRequest.Resolve(networkMessage);
-            break;
+            return;
         }
     }
+
+    throw std::runtime_error("Received response but there was no request");
 }
 
 void NetworkClient::AddPortHandler(const std::string& port, const std::function<NetworkMessage(NetworkMessage&)>& handler)
