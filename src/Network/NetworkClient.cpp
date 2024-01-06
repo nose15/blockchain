@@ -55,16 +55,17 @@ void NetworkClient::MessageHandler(NetworkMessage& networkMessage)
 
 void NetworkClient::RequestHandler(NetworkMessage & networkMessage) {
     if (networkMessage.Type() != Request) {
-        return;
+        throw std::runtime_error("Invalid message type - should be \"Request\"");
     }
 
     std::string port = networkMessage.SenderAddress().port;
+
     try {
         std::function<NetworkMessage(NetworkMessage &)> portHandler = portHandlers[port];
         NetworkMessage response = portHandler(networkMessage);
         network->SendMessage(response);
     } catch (const std::bad_function_call & e) {
-        std::cout << "func doesnt exist for " << port << std::endl;
+        throw std::runtime_error("The port " + port + " doesn't have a handler");
     }
 }
 
@@ -73,7 +74,7 @@ void NetworkClient::ResponseHandler(NetworkMessage & networkMessage)
 {
     if (networkMessage.Type() != Response)
     {
-        return;
+        throw std::runtime_error("Invalid message type - should be \"Response\"");
     }
 
     for (auto pendingRequest : this->pendingRequests)
@@ -81,6 +82,7 @@ void NetworkClient::ResponseHandler(NetworkMessage & networkMessage)
         if (pendingRequest.GetId() == networkMessage.Id())
         {
             pendingRequest.Resolve(networkMessage);
+            break;
         }
     }
 }
@@ -88,7 +90,7 @@ void NetworkClient::ResponseHandler(NetworkMessage & networkMessage)
 void NetworkClient::AddPortHandler(const std::string& port, const std::function<NetworkMessage(NetworkMessage&)>& handler)
 {
     auto iter = portHandlers.find(port);
-    if (iter != portHandlers.end()) throw std::runtime_error("This port is already occupied"); // TODO: Add custom errors
+    if (iter != portHandlers.end()) throw std::runtime_error("This port is already occupied");
 
     std::pair<std::string, std::function<NetworkMessage(NetworkMessage&)>> handlerPair(port, handler);
 
