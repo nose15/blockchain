@@ -1,9 +1,9 @@
 //
 // Created by lukol on 26.11.2023.
 //
-#include "Network/Network.h"
-#include "Network/NetworkClient.h"
-#include "Node/Node.h"
+#include "Network/Network.hpp"
+#include "Network/NetworkClient.hpp"
+#include "Node/Node.hpp"
 
 // TODO: Separate public from private headers so all the components can be more independent
 // TODO: Request class that inherits from the NetworkMessage
@@ -14,7 +14,6 @@
 
 // TODO: App framework and separation from the network
 
-int main()
-{
-    return 0;
+int main() {
+	return 0;
 }

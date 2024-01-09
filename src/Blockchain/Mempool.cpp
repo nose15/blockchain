@@ -2,17 +2,15 @@
 // Created by lukol on 04.12.2023.
 //
 
-#include "Mempool.h"
+#include <Blockchain/Mempool.hpp>
 
 
 Mempool::Mempool() = default;
 
-void Mempool::addTransaction(Transaction &transaction)
-{
-    this->currentPool.push_back(transaction);
+void Mempool::addTransaction(Transaction & transaction) {
+	this->currentPool.push_back(transaction);
 }
 
-void Mempool::setPool(std::vector<Transaction> newPool)
-{
-    this->currentPool = newPool;
+void Mempool::setPool(std::vector<Transaction> newPool) {
+	this->currentPool = newPool;
 }

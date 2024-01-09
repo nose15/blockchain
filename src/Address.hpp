@@ -8,11 +8,12 @@
 #define BLOCKCHAIN_ADDRESS_H
 
 struct Address {
-    std::string ip;
-    std::string port;
+	std::string ip;
+	std::string port;
 
-    Address() = default;
-    Address(std::string ip, std::string port) : ip(ip), port(port) {}
+	Address() = default;
+
+	Address(std::string ip, std::string port) : ip(ip), port(port) {}
 };
 
 #endif //BLOCKCHAIN_ADDRESS_H
