@@ -8,17 +8,15 @@
 #include <iostream>
 #include <string>
 
-
 #ifndef BLOCKCHAIN_UTILS_H
 #define BLOCKCHAIN_UTILS_H
 
-class Utils {
-public:
-	static unsigned int generateRandomId();
+namespace Utils {
+	uint32_t generateRandomId();
 
-	static std::vector<std::string> SplitString(const std::string & str, char separator, uint32_t target_count);
+	std::vector<std::string> SplitString(const std::string & str, char separator, uint32_t target_count);
 
-	static void PrintMap(const std::map<std::string, Address> & peerMap);
+	void PrintMap(const std::map<std::string, Address> & peerMap);
 };
 
 

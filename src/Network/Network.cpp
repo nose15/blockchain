@@ -2,7 +2,7 @@
 // Created by lukol on 26.11.2023.
 //
 
-#include "Network.hpp"
+#include <Network/Network.hpp>
 
 Network::Network() {
 	std::cout << "Network established" << std::endl;

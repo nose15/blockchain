@@ -3,9 +3,8 @@
 //
 
 #include <Blockchain/BlockchainClient.hpp>
-#include "DataParser/DataParser.hpp"
 
-BlockchainClient::BlockchainClient(NetworkClient *networkClient) : networkClient(networkClient) {
+BlockchainClient::BlockchainClient(NetworkClient * networkClient) : networkClient(networkClient) {
 	// TODO: More sophisticated id generation
 	// TODO: Improve ports flexibility (allow for the ports to be assigned automatically)
 

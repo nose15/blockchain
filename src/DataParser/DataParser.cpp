@@ -5,7 +5,6 @@
 #include <iostream>
 
 #include <DataParser/DataParser.hpp>
-#include <Utils/Utils.hpp>
 
 std::string DataParser::FetchEndpoint(const std::string & messageBody) {
 	std::vector<std::string> messageElements = Utils::SplitString(messageBody, ' ', 2);

@@ -6,6 +6,7 @@
 #include <string>
 #include <Blockchain/Transaction.hpp>
 #include <Network/NetworkClient.hpp>
+#include <DataParser/DataParser.hpp>
 #include <Apps/Router.hpp>
 
 #ifndef BLOCKCHAIN_BLOCKCHAINCLIENT_H
@@ -16,7 +17,7 @@ class BlockchainClient {
 private:
 	std::string id;
 	std::map<std::string, Address> peers;
-	NetworkClient *networkClient;
+	NetworkClient * networkClient;
 	Router router;
 
 	json DiscoveryEndpoint(NetworkMessage & networkMessage);

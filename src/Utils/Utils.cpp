@@ -2,7 +2,7 @@
 // Created by lukasz on 08.12.23.
 //
 
-#include "Utils.hpp"
+#include <Utils/Utils.hpp>
 
 uint32_t Utils::generateRandomId() {
 	//WARNING: THIS IS NOT CRYPTOGRAPHICALLY SECURE

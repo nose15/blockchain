@@ -2,11 +2,14 @@
 // Created by lukol on 29.11.2023.
 //
 
-#include "Network.hpp"
+#include <iostream>
+#include <string>
+#include <utility>
+#include <future>
+#include <Network/Network.hpp>
 #include <Network/PendingRequest.hpp>
 #include <Address.hpp>
-#include "Utils/Utils.hpp"
-#include <future>
+#include <Utils/Utils.hpp>
 
 #ifndef BLOCKCHAIN_NETWORKCLIENT_H
 #define BLOCKCHAIN_NETWORKCLIENT_H
@@ -17,7 +20,7 @@ private:
 	std::string ipAddress;
 	std::vector<PendingRequest> pendingRequests;
 
-	Network *network;
+	Network * network;
 	std::map<std::string, std::function<NetworkMessage(NetworkMessage &)>> portHandlers;
 	NetworkMessage currentResponse;
 

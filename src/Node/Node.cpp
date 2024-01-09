@@ -2,9 +2,9 @@
 // Created by lukol on 26.11.2023.
 //
 
-#include "Node.hpp"
+#include <Node/Node.hpp>
 
-Node::Node(std::string id, Network *network) : id(std::move(id)) {
+Node::Node(std::string id, Network * network) : id(std::move(id)) {
 	std::cout << "Node " << id << " created" << std::endl;
 	this->networkClient = new NetworkClient(this->id, network);
 	this->blockchainClient = new BlockchainClient(networkClient);

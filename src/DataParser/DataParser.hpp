@@ -4,20 +4,18 @@
 
 #include <map>
 #include <string>
+#include <Utils/Utils.hpp>
 
 #ifndef BLOCKCHAIN_DATAPARSER_H
 #define BLOCKCHAIN_DATAPARSER_H
 
 
-class DataParser {
-public:
-	DataParser() = delete;
+namespace DataParser {
+	inline std::string FetchEndpoint(const std::string & messageBody);
 
-	static std::string FetchEndpoint(const std::string & messageBody);
+	inline std::string FetchContent(const std::string & messageBody);
 
-	static std::string FetchContent(const std::string & messageBody);
-
-	static std::string FetchMethod(const std::string & messageBody);
+	inline std::string FetchMethod(const std::string & messageBody);
 };
 
 

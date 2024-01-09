@@ -2,14 +2,10 @@
 // Created by lukol on 29.11.2023.
 //
 
-#include <iostream>
-#include <string>
-#include <utility>
-
 #include <Network/NetworkClient.hpp>
 
 
-NetworkClient::NetworkClient(std::string nodeId, Network *network) : nodeId(std::move(nodeId)), network(network) {
+NetworkClient::NetworkClient(std::string nodeId, Network * network) : nodeId(std::move(nodeId)), network(network) {
 	try {
 		this->ipAddress = network->connect(
 				[this](NetworkMessage networkMessage) { this->MessageHandler(networkMessage); });

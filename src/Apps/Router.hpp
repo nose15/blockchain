@@ -4,7 +4,10 @@
 
 #include <map>
 #include <string>
+#include <utility>
 #include <Network/NetworkMessage.hpp>
+#include <DataParser/DataParser.hpp>
+#include <Apps/Router.hpp>
 
 #ifndef BLOCKCHAIN_ROUTER_H
 #define BLOCKCHAIN_ROUTER_H

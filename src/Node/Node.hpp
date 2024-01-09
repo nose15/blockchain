@@ -10,10 +10,10 @@
 class Node {
 private:
 	std::string id;
-	NetworkClient *networkClient;
-	BlockchainClient *blockchainClient;
+	NetworkClient * networkClient;
+	BlockchainClient * blockchainClient;
 public:
-	Node(std::string, Network *network);
+	Node(std::string, Network * network);
 
 	std::string getId();
 
