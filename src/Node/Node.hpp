@@ -7,23 +7,26 @@
 #ifndef BLOCKCHAIN_NODE_H
 #define BLOCKCHAIN_NODE_H
 
-class Node {
-private:
-	std::string id;
-	NetworkClient * networkClient;
-	BlockchainClient * blockchainClient;
-public:
-	Node(std::string, Network * network);
+namespace Node {
+	class Node {
+	private:
+		std::string id;
+		Network::NetworkClient * networkClient;
+		Blockchain::BlockchainClient * blockchainClient;
+	public:
+		Node(std::string, Network::NetworkSim * network);
 
-	std::string getId();
+		std::string getId();
 
-	void Ping(const Address & receiverAddress);
+		void Ping(const Address & receiverAddress);
 
-	void RequestTest();
+		void RequestTest();
 
-	void BlockchainTest(const std::vector<Address> & initialPeers);
+		void BlockchainTest(const std::vector<Address> & initialPeers);
 
-	void BlockchainTransactionTest(std::string receiverId, uint32_t amount);
-};
+		void BlockchainTransactionTest(std::string receiverId, uint32_t amount);
+	};
+}
+
 
 #endif //BLOCKCHAIN_NODE_H

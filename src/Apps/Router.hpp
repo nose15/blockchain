@@ -7,14 +7,16 @@
 #include <utility>
 #include <Network/NetworkMessage.hpp>
 #include <DataParser/DataParser.hpp>
-#include <Apps/Router.hpp>
 
 #ifndef BLOCKCHAIN_ROUTER_H
 #define BLOCKCHAIN_ROUTER_H
 
+namespace Router {
+	class Router;
+}
 
-class Router {
-private:
+class Router::Router {
+protected:
 	std::map<std::string, std::function<json(NetworkMessage &)>> m_endpoints;
 public:
 	Router();

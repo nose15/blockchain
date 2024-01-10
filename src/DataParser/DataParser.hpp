@@ -11,11 +11,11 @@
 
 
 namespace DataParser {
-	inline std::string FetchEndpoint(const std::string & messageBody);
+	std::string FetchEndpoint(const std::string & messageBody);
 
-	inline std::string FetchContent(const std::string & messageBody);
+	std::string FetchContent(const std::string & messageBody);
 
-	inline std::string FetchMethod(const std::string & messageBody);
+	std::string FetchMethod(const std::string & messageBody);
 };
 
 

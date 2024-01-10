@@ -6,6 +6,7 @@
 #include <utility>
 #include <random>
 #include <Address.hpp>
+#include <Network/Network.hpp>
 #include "../../external/nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -13,41 +14,44 @@ using json = nlohmann::json;
 #ifndef BLOCKCHAIN_NETWORKMESSAGE_H
 #define BLOCKCHAIN_NETWORKMESSAGE_H
 
-enum MessageType {
-	Broadcast,
-	Request,
-	Response,
-	Ping,
-};
+namespace Network {
+	enum MessageType {
+		Broadcast,
+		Request,
+		Response,
+		Ping,
+	};
 
 
-class NetworkMessage {
-private:
-	uint32_t m_id = 0;
-	Address m_senderAddress = Address("0", "0");
-	Address m_receiverAddress = Address("0", "0");
-	MessageType m_messageType = Ping;
-	std::string m_body = " ";
+	class NetworkMessage {
+	protected:
+		uint32_t m_id = 0;
+		Address m_senderAddress = Address("0", "0");
+		Address m_receiverAddress = Address("0", "0");
+		MessageType m_messageType = Ping;
+		std::string m_body = " ";
 
-public:
-	NetworkMessage() = default;
+	public:
+		NetworkMessage() = default;
 
-	NetworkMessage(uint32_t id, MessageType type, Address senderAddress, Address receiverAddress,
-	               std::string message);
+		NetworkMessage(uint32_t id, MessageType type, Address senderAddress, Address receiverAddress,
+		               std::string message);
 
-	NetworkMessage(uint32_t id, Address senderAddress, Address receiverAddress, std::string message);
+		NetworkMessage(uint32_t id, Address senderAddress, Address receiverAddress, std::string message);
 
-	uint32_t Id();
+		uint32_t Id();
 
-	std::string Body();
+		std::string Body();
 
-	MessageType Type();
+		MessageType Type();
 
-	Address SenderAddress();
+		Address SenderAddress();
 
-	Address ReceiverAddress();
+		Address ReceiverAddress();
 
-	json Json();
-};
+		json Json();
+	};
+}
+
 
 #endif //BLOCKCHAIN_NETWORKMESSAGE_H

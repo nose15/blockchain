@@ -4,13 +4,14 @@
 
 #include <Blockchain/Mempool.hpp>
 
+namespace Blockchain {
+	Mempool::Mempool() = default;
 
-Mempool::Mempool() = default;
+	void Mempool::addTransaction(Transaction & transaction) {
+		this->currentPool.push_back(transaction);
+	}
 
-void Mempool::addTransaction(Transaction & transaction) {
-	this->currentPool.push_back(transaction);
-}
-
-void Mempool::setPool(std::vector<Transaction> newPool) {
-	this->currentPool = newPool;
+	void Mempool::setPool(std::vector<Transaction> newPool) {
+		this->currentPool = newPool;
+	}
 }

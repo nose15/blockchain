@@ -1,7 +1,7 @@
 //
 // Created by lukol on 26.11.2023.
 //
-#include "Network/Network.hpp"
+#include "Network/NetworkSim.hpp"
 #include "Network/NetworkClient.hpp"
 #include "Node/Node.hpp"
 
@@ -9,7 +9,7 @@
 // TODO: Request class that inherits from the NetworkMessage
 // TODO: Learn and implement: error handling and tests
 // TODO: Logging system, so it doesn't throw everything to the terminal window
-// TODO: Network message builder
+// TODO: NetworkSim message builder
 // TODO: Learn and implement: move enums out of the header files
 
 // TODO: App framework and separation from the network

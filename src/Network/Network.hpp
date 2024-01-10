@@ -1,37 +1,15 @@
 //
-// Created by lukol on 26.11.2023.
+// Created by lukol on 10.01.2024.
 //
 
-#include <string>
-#include <map>
-#include <iostream>
-#include <list>
-#include <functional>
-#include <stack>
-#include <Network/NetworkMessage.hpp>
+#ifndef BLOCKCHAIN_NETWORK_HPP
+#define BLOCKCHAIN_NETWORK_HPP
 
-#ifndef BLOCKCHAIN_NETWORK_H
-#define BLOCKCHAIN_NETWORK_H
+namespace Network {
+	class NetworkSim;
+	class NetworkClient;
+	class NetworkMessage;
+	class PendingRequest;
+}
 
-class Network {
-private:
-	NetworkMessage current_traffic;
-	std::map<std::string, std::function<void(NetworkMessage)>> connected;
-	std::stack<std::string> availableIps;
-
-	void TriggerReceiver();
-
-	std::string acquireIp();
-
-public:
-	Network();
-
-	void SendMessage(const NetworkMessage & networkMessage);
-
-	std::string connect(const std::function<void(NetworkMessage)> &);
-
-	void disconnect(const std::string &);
-};
-
-
-#endif //BLOCKCHAIN_NETWORK_H
+#endif //BLOCKCHAIN_NETWORK_HPP

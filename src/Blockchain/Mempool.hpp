@@ -4,25 +4,28 @@
 
 #include <vector>
 #include <Blockchain/Transaction.hpp>
+#include <Blockchain/Blockchain.hpp>
 
 #ifndef BLOCKCHAIN_MEMPOOL_H
 #define BLOCKCHAIN_MEMPOOL_H
 
+namespace Blockchain {
+	class Mempool {
+	private:
+		std::vector<Transaction> currentPool;
+	public:
+		Mempool();
 
-class Mempool {
-private:
-	std::vector<Transaction> currentPool;
-public:
-	Mempool();
+		void setPool(std::vector<Transaction>);
 
-	void setPool(std::vector<Transaction>);
+		std::vector<Transaction> getPool;
 
-	std::vector<Transaction> getPool;
+		void addTransaction(Transaction &);
 
-	void addTransaction(Transaction &);
+		void removeTransaction(Transaction &);
+	};
+}
 
-	void removeTransaction(Transaction &);
-};
 
 
 #endif //BLOCKCHAIN_MEMPOOL_H
