@@ -17,15 +17,15 @@ namespace Router {
 
 class Router::Router {
 protected:
-	std::map<std::string, std::function<json(NetworkMessage &)>> m_endpoints;
+	std::map<std::string, std::function<json(Network::NetworkMessage &)>> m_endpoints;
 public:
 	Router();
 
-	Router(std::map<std::string, std::function<json(NetworkMessage &)>> endpoints);
+	Router(std::map<std::string, std::function<json(Network::NetworkMessage &)>> endpoints);
 
-	void AddEndpoint(std::string path, std::function<json(NetworkMessage &)> handler);
+	void AddEndpoint(std::string path, std::function<json(Network::NetworkMessage &)> handler);
 
-	std::function<json(NetworkMessage &)> & Dispatch(const std::string & endpoint);
+	std::function<json(Network::NetworkMessage &)> & Dispatch(const std::string & endpoint);
 };
 
 

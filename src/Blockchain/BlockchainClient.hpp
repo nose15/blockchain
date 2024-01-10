@@ -5,10 +5,9 @@
 #include <map>
 #include <string>
 #include <Blockchain/Transaction.hpp>
-#include <Network/NetworkClient.hpp>
+#include <Network/Network.hpp>
 #include <DataParser/DataParser.hpp>
 #include <Apps/Router.hpp>
-#include <Blockchain/Blockchain.hpp>
 
 #ifndef BLOCKCHAIN_BLOCKCHAINCLIENT_H
 #define BLOCKCHAIN_BLOCKCHAINCLIENT_H

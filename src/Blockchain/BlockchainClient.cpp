@@ -37,7 +37,7 @@ namespace Blockchain {
 
 		std::string responseBodyStr = "200 OK " + responseBody.dump();
 
-		Network::NetworkMessage responseMessage(networkMessage.Id(), Network::Response, networkMessage.ReceiverAddress(),
+		Network::NetworkMessage responseMessage(networkMessage.Id(), Network::MessageType::Response, networkMessage.ReceiverAddress(),
 		                               networkMessage.SenderAddress(), responseBodyStr);
 		return responseMessage;
 	}

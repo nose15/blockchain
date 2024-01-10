@@ -4,44 +4,47 @@
 
 #include <Utils/Utils.hpp>
 
-uint32_t Utils::generateRandomId() {
-	//WARNING: THIS IS NOT CRYPTOGRAPHICALLY SECURE
-	//TODO: Implement a more cryptographically secure solution
-	std::random_device rd;
-	std::mt19937 gen(rd());
+namespace Utils {
+	uint32_t generateRandomId() {
+		//WARNING: THIS IS NOT CRYPTOGRAPHICALLY SECURE
+		//TODO: Implement a more cryptographically secure solution
+		std::random_device rd;
+		std::mt19937 gen(rd());
 
-	std::uniform_int_distribution<uint32_t> dis(1, std::numeric_limits<int>::max());
+		std::uniform_int_distribution<uint32_t> dis(1, std::numeric_limits<int>::max());
 
-	return dis(gen);
-}
+		return dis(gen);
+	}
 
-std::vector<std::string> Utils::SplitString(const std::string & str, char separator, uint32_t target_count = 0) {
-	uint32_t count = target_count;
-	std::vector<std::string> result = {};
+	std::vector<std::string> SplitString(const std::string & str, char separator, uint32_t target_count = 0) {
+		uint32_t count = target_count;
+		std::vector<std::string> result = {};
 
-	std::string currentString;
-	for (char currentChar: str) {
-		if (currentChar == separator && count != 0) {
-			result.push_back(currentString);
-			currentString = "";
-			count--;
-			continue;
+		std::string currentString;
+		for (char currentChar: str) {
+			if (currentChar == separator && count != 0) {
+				result.push_back(currentString);
+				currentString = "";
+				count--;
+				continue;
+			}
+
+			currentString += currentChar;
 		}
 
-		currentString += currentChar;
+		if (!currentString.empty()) {
+			result.push_back(currentString);
+		}
+
+		return result;
 	}
 
-	if (!currentString.empty()) {
-		result.push_back(currentString);
+	void PrintMap(const std::map<std::string, Address> & peerMap) {
+		for (const auto & pair: peerMap) {
+			std::cout << pair.first << " " << pair.second.ip << ":" << pair.second.port << "; ";
+		}
+
+		std::cout << std::endl;
 	}
 
-	return result;
-}
-
-void Utils::PrintMap(const std::map<std::string, Address> & peerMap) {
-	for (const auto & pair: peerMap) {
-		std::cout << pair.first << " " << pair.second.ip << ":" << pair.second.port << "; ";
-	}
-
-	std::cout << std::endl;
 }

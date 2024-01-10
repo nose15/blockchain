@@ -6,7 +6,6 @@
 #include <utility>
 #include <random>
 #include <Address.hpp>
-#include <Network/Network.hpp>
 #include "../../external/nlohmann/json.hpp"
 
 using json = nlohmann::json;
@@ -15,7 +14,7 @@ using json = nlohmann::json;
 #define BLOCKCHAIN_NETWORKMESSAGE_H
 
 namespace Network {
-	enum MessageType {
+	enum class MessageType : uint8_t {
 		Broadcast,
 		Request,
 		Response,
@@ -28,7 +27,7 @@ namespace Network {
 		uint32_t m_id = 0;
 		Address m_senderAddress = Address("0", "0");
 		Address m_receiverAddress = Address("0", "0");
-		MessageType m_messageType = Ping;
+		MessageType m_messageType = MessageType::Ping;
 		std::string m_body = " ";
 
 	public:

@@ -2,7 +2,7 @@
 // Created by lukol on 26.11.2023.
 //
 
-#include "NetworkSim.hpp"
+#include <Network/NetworkSim.hpp>
 
 namespace Network {
 	NetworkSim::NetworkSim() {

@@ -4,7 +4,6 @@
 
 #include <vector>
 #include <Blockchain/Transaction.hpp>
-#include <Blockchain/Blockchain.hpp>
 
 #ifndef BLOCKCHAIN_MEMPOOL_H
 #define BLOCKCHAIN_MEMPOOL_H

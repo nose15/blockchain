@@ -8,7 +8,7 @@ namespace Network {
 	PendingRequest::PendingRequest(uint32_t id, std::future<NetworkMessage> & responseRef,
 	                               std::promise<NetworkMessage> & responsePromise) : responsePromise(responsePromise) {
 		this->id = id;
-		this->status = pending;
+		this->status = Status::Pending;
 	}
 
 	uint32_t PendingRequest::GetId() { return this->id; }

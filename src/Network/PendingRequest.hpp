@@ -3,17 +3,16 @@
 //
 
 #include <future>
-#include <Network/Network.hpp>
 #include <Network/NetworkMessage.hpp>
 
 #ifndef BLOCKCHAIN_PENDINGREQUEST_H
 #define BLOCKCHAIN_PENDINGREQUEST_H
 
 namespace Network {
-	enum Status {
-		pending,
-		error,
-		resolved,
+	enum class Status : uint8_t {
+		Pending,
+		Error,
+		Resolved,
 	};
 
 

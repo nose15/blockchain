@@ -4,7 +4,6 @@
 
 #include <string>
 #include <cstdint>
-#include <Blockchain/Blockchain.hpp>
 
 #ifndef BLOCKCHAIN_TRANSACTION_H
 #define BLOCKCHAIN_TRANSACTION_H

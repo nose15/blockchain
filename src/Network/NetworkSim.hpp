@@ -8,7 +8,6 @@
 #include <list>
 #include <functional>
 #include <stack>
-#include <Network/Network.hpp>
 #include <Network/NetworkMessage.hpp>
 
 #ifndef BLOCKCHAIN_NETWORK_H

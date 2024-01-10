@@ -5,10 +5,10 @@
 #include <Node/Node.hpp>
 
 namespace Node {
-	Node::Node(std::string id, NetworkSim * network) : id(std::move(id)) {
+	Node::Node(std::string id, Network::NetworkSim * network) : id(std::move(id)) {
 		std::cout << "Node " << id << " created" << std::endl;
-		this->networkClient = new NetworkClient(this->id, network);
-		this->blockchainClient = new BlockchainClient(networkClient);
+		this->networkClient = new Network::NetworkClient(this->id, network);
+		this->blockchainClient = new Blockchain::BlockchainClient(networkClient);
 	}
 
 	std::string Node::getId() {
@@ -18,14 +18,14 @@ namespace Node {
 
 //TODO: Implement some UI
 	void Node::Ping(const Address & receiverAddress) {
-		NetworkMessage response = networkClient->SendRequest(receiverAddress, "8000", R"({"message": "ping"})");
+		Network::NetworkMessage response = networkClient->SendRequest(receiverAddress, "8000", R"({"message": "ping"})");
 		json body = response.Json();
 		std::cout << this->id << " ping " << receiverAddress.ip << ":" << receiverAddress.port << " => " << body["message"]
 		          << std::endl;
 	}
 
 	void Node::RequestTest() {
-		NetworkMessage response = this->networkClient->SendRequest(Address("2", "8000"), "8000",
+		Network::NetworkMessage response = this->networkClient->SendRequest(Address("2", "8000"), "8000",
 		                                                           R"({"message": "request1"})");
 	}
 

@@ -4,6 +4,7 @@
 
 #include <Network/NetworkClient.hpp>
 
+
 namespace Network {
 	NetworkClient::NetworkClient(std::string nodeId, NetworkSim * network) : nodeId(std::move(nodeId)), network(network) {
 		try {
@@ -24,7 +25,7 @@ namespace Network {
 		PendingRequest pendingRequest(requestId, responseFuture, pendingResponse);
 		pendingRequests.push_back(pendingRequest);
 
-		NetworkMessage networkMessage(requestId, Request, Address(ipAddress, responsePort), receiverAddress, message);
+		NetworkMessage networkMessage(requestId, MessageType::Request, Address(ipAddress, responsePort), receiverAddress, message);
 
 		try {
 			this->network->SendMessage(networkMessage);
@@ -38,11 +39,11 @@ namespace Network {
 // TODO: Consider the right order of handling the message. What should be handled first, Endpoint or Type?
 	void NetworkClient::MessageHandler(NetworkMessage & networkMessage) {
 		switch (networkMessage.Type()) {
-			case Response: {
+			case MessageType::Response: {
 				ResponseHandler(networkMessage);
 				break;
 			}
-			case Request: {
+			case MessageType::Request: {
 				try {
 					network->SendMessage(RequestHandler(networkMessage));
 				} catch (std::runtime_error & error) {
@@ -50,7 +51,7 @@ namespace Network {
 				}
 				break;
 			}
-			case Broadcast: {
+			case MessageType::Broadcast: {
 				std::cout << this->nodeId << " received a broadcasted message" << std::endl;
 				break;
 			}
@@ -61,7 +62,7 @@ namespace Network {
 	}
 
 	NetworkMessage && NetworkClient::RequestHandler(NetworkMessage & networkMessage) {
-		if (networkMessage.Type() != Request) {
+		if (networkMessage.Type() != MessageType::Request) {
 			throw std::runtime_error("Invalid message type - should be \"Request\"");
 		}
 
@@ -71,7 +72,7 @@ namespace Network {
 			std::function<NetworkMessage(NetworkMessage &)> portHandler = portHandlers[port];
 			return std::move(portHandler(networkMessage));
 		} catch (const std::bad_function_call & e) {
-			return NetworkMessage(networkMessage.Id(), Response,
+			return NetworkMessage(networkMessage.Id(), MessageType::Response,
 			                      Address(this->ipAddress, networkMessage.ReceiverAddress().port),
 			                      networkMessage.SenderAddress(), "404");
 		}
@@ -79,7 +80,7 @@ namespace Network {
 
 
 	void NetworkClient::ResponseHandler(NetworkMessage & networkMessage) {
-		if (networkMessage.Type() != Response) {
+		if (networkMessage.Type() != MessageType::Response) {
 			throw std::runtime_error("Invalid message type - should be \"Response\"");
 		}
 
@@ -107,7 +108,7 @@ namespace Network {
 	void NetworkClient::BroadcastMessage(const std::string & message) {
 		//TODO: Add NetworkMessageFactory
 		uint32_t id = Utils::generateRandomId();
-		NetworkMessage networkMessage(id, Broadcast, Address(ipAddress, "0"), Address("0", "0"), message);
+		NetworkMessage networkMessage(id, MessageType::Broadcast, Address(ipAddress, "0"), Address("0", "0"), message);
 		network->SendMessage(networkMessage);
 	}
 

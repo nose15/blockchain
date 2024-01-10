@@ -6,10 +6,9 @@
 #include <string>
 #include <utility>
 #include <future>
-#include <Network/Network.hpp>
 #include <Network/NetworkSim.hpp>
+#include <Network/NetworkMessage.hpp>
 #include <Network/PendingRequest.hpp>
-#include <Address.hpp>
 #include <Utils/Utils.hpp>
 
 #ifndef BLOCKCHAIN_NETWORKCLIENT_H

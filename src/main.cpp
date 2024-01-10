@@ -1,9 +1,9 @@
 //
 // Created by lukol on 26.11.2023.
 //
-#include "Network/NetworkSim.hpp"
-#include "Network/NetworkClient.hpp"
-#include "Node/Node.hpp"
+#include <Network/Network.hpp>
+#include <Blockchain/Blockchain.hpp>
+#include <Node/Node.hpp>
 
 // TODO: Separate public from private headers so all the components can be more independent
 // TODO: Request class that inherits from the NetworkMessage
