@@ -3,12 +3,13 @@
 //
 
 #include <Node/Node.hpp>
+#include <memory>
 
 namespace Node {
-	Node::Node(std::string id, Network::NetworkSim * network) : id(std::move(id)) {
+	Node::Node(std::string id, std::unique_ptr<Network::NetworkSim> network) : id(std::move(id)) {
 		std::cout << "Node " << id << " created" << std::endl;
-		this->networkClient = new Network::NetworkClient(this->id, network);
-		this->blockchainClient = new Blockchain::BlockchainClient(networkClient);
+		this->networkClient = std::make_shared<Network::NetworkClient>(this->id, std::move(network));
+		this->blockchainClient = std::make_unique<Blockchain::BlockchainClient>(networkClient);
 	}
 
 	std::string Node::getId() {

@@ -9,7 +9,7 @@
 // TODO: Request class that inherits from the NetworkMessage
 // TODO: Learn and implement: error handling and tests
 // TODO: Logging system, so it doesn't throw everything to the terminal window
-// TODO: NetworkSim message builder
+// TODO: Network message builder
 // TODO: Learn and implement: move enums out of the header files
 
 // TODO: App framework and separation from the network

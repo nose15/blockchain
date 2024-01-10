@@ -6,6 +6,7 @@
 #include <string>
 #include <utility>
 #include <future>
+#include <memory>
 #include <Network/NetworkSim.hpp>
 #include <Network/NetworkMessage.hpp>
 #include <Network/PendingRequest.hpp>
@@ -21,7 +22,7 @@ namespace Network {
 		std::string ipAddress;
 		std::vector<PendingRequest> pendingRequests;
 
-		NetworkSim * network;
+		std::unique_ptr<NetworkSim> network;
 		std::map<std::string, std::function<NetworkMessage(NetworkMessage &)>> portHandlers;
 		NetworkMessage currentResponse;
 
@@ -30,7 +31,7 @@ namespace Network {
 		void ResponseHandler(NetworkMessage &);
 
 	public:
-		NetworkClient(std::string, NetworkSim *);
+		NetworkClient(std::string, std::unique_ptr<NetworkSim>);
 
 		void AddPortHandler(const std::string & port, const std::function<NetworkMessage(NetworkMessage &)> &);
 

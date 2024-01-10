@@ -18,7 +18,7 @@ namespace Blockchain {
 	private:
 		std::string id;
 		std::map<std::string, Address> peers;
-		Network::NetworkClient * networkClient;
+		std::shared_ptr<Network::NetworkClient> networkClient;
 		Router::Router router;
 
 		json DiscoveryEndpoint(Network::NetworkMessage & networkMessage);
@@ -26,7 +26,7 @@ namespace Blockchain {
 		json ConnectEndpoint(Network::NetworkMessage & networkMessage);
 
 	public:
-		BlockchainClient(Network::NetworkClient *);
+		BlockchainClient(std::shared_ptr<Network::NetworkClient> networkClient);
 
 		void DiscoverPeers(const std::vector<Address> & initialPeers);
 

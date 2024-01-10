@@ -6,10 +6,11 @@
 
 namespace Blockchain {
 
-	BlockchainClient::BlockchainClient(Network::NetworkClient * networkClient) : networkClient(networkClient) {
+	BlockchainClient::BlockchainClient(std::shared_ptr<Network::NetworkClient> networkClient) {
 		// TODO: More sophisticated id generation
 		// TODO: Improve ports flexibility (allow for the ports to be assigned automatically)
 
+		this->networkClient = networkClient;
 		this->id = networkClient->getIp();
 
 		networkClient->AddPortHandler("8000", [this](Network::NetworkMessage & networkMessage) -> Network::NetworkMessage {

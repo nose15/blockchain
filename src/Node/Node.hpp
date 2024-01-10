@@ -2,6 +2,8 @@
 // Created by lukol on 26.11.2023.
 //
 
+#include <memory>
+#include <Network/Network.hpp>
 #include <Blockchain/BlockchainClient.hpp>
 
 #ifndef BLOCKCHAIN_NODE_H
@@ -11,10 +13,10 @@ namespace Node {
 	class Node {
 	private:
 		std::string id;
-		Network::NetworkClient * networkClient;
-		Blockchain::BlockchainClient * blockchainClient;
+		std::shared_ptr<Network::NetworkClient> networkClient;
+		std::unique_ptr<Blockchain::BlockchainClient> blockchainClient;
 	public:
-		Node(std::string, Network::NetworkSim * network);
+		Node(std::string, std::unique_ptr<Network::NetworkSim> network);
 
 		std::string getId();
 

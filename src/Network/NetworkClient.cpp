@@ -6,9 +6,11 @@
 
 
 namespace Network {
-	NetworkClient::NetworkClient(std::string nodeId, NetworkSim * network) : nodeId(std::move(nodeId)), network(network) {
+	NetworkClient::NetworkClient(std::string nodeId, std::unique_ptr<NetworkSim> network) : nodeId(std::move(nodeId)) {
+		this->network = std::move(network);
+
 		try {
-			this->ipAddress = network->connect(
+			this->ipAddress = this->network->connect(
 					[this](NetworkMessage networkMessage) { this->MessageHandler(networkMessage); });
 			std::cout << "NetworkClient for " << this->nodeId << " established" << std::endl;
 		} catch (std::runtime_error & error) {
@@ -119,6 +121,4 @@ namespace Network {
 
 
 	const std::string & NetworkClient::getIp() { return this->ipAddress; }
-
-
 }
