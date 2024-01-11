@@ -16,7 +16,7 @@ namespace Utils {
 
 	std::vector<std::string> SplitString(const std::string & str, char separator, uint32_t target_count);
 
-	void PrintMap(const std::map<std::string, Address> & peerMap);
+	void PrintMap(const std::map<uint8_t, Address> & peerMap);
 };
 
 

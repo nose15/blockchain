@@ -6,7 +6,7 @@
 
 
 namespace Network {
-	NetworkClient::NetworkClient(std::string nodeId, std::unique_ptr<NetworkSim> network) : nodeId(std::move(nodeId)) {
+	NetworkClient::NetworkClient(uint8_t nodeId, std::unique_ptr<NetworkSim> network) : nodeId(nodeId) {
 		this->network = std::move(network);
 
 		try {
@@ -18,7 +18,7 @@ namespace Network {
 		}
 	}
 
-	NetworkMessage NetworkClient::SendRequest(const Address & receiverAddress, const std::string & responsePort,
+	NetworkMessage NetworkClient::SendRequest(const Address & receiverAddress, uint16_t responsePort,
 	                                          const std::string & message) {
 		std::promise<NetworkMessage> pendingResponse;
 		std::future<NetworkMessage> responseFuture = pendingResponse.get_future();
@@ -68,11 +68,11 @@ namespace Network {
 			throw std::runtime_error("Invalid message type - should be \"Request\"");
 		}
 
-		std::string port = networkMessage.SenderAddress().port;
+		uint16_t port = networkMessage.SenderAddress().port;
 
 		try {
 			std::function<NetworkMessage(NetworkMessage &)> portHandler = portHandlers[port];
-			return std::move(portHandler(networkMessage));
+			return portHandler(networkMessage);
 		} catch (const std::bad_function_call & e) {
 			return NetworkMessage(networkMessage.Id(), MessageType::Response,
 			                      Address(this->ipAddress, networkMessage.ReceiverAddress().port),
@@ -97,20 +97,17 @@ namespace Network {
 	}
 
 	void
-	NetworkClient::AddPortHandler(const std::string & port,
-	                              const std::function<NetworkMessage(NetworkMessage &)> & handler) {
+	NetworkClient::AddPortHandler(uint16_t port, const std::function<NetworkMessage(NetworkMessage &)> & handler) {
 		auto iter = portHandlers.find(port);
 		if (iter != portHandlers.end()) throw std::runtime_error("This port is already occupied");
 
-		std::pair<std::string, std::function<NetworkMessage(NetworkMessage &)>> handlerPair(port, handler);
-
-		portHandlers.insert(handlerPair);
+		portHandlers.insert({port, handler});
 	}
 
 	void NetworkClient::BroadcastMessage(const std::string & message) {
 		//TODO: Add NetworkMessageFactory
 		uint32_t id = Utils::generateRandomId();
-		NetworkMessage networkMessage(id, MessageType::Broadcast, Address(ipAddress, "0"), Address("0", "0"), message);
+		NetworkMessage networkMessage(id, MessageType::Broadcast, Address(ipAddress, 0), Address(0, 0), message);
 		network->SendMessage(networkMessage);
 	}
 
@@ -120,5 +117,5 @@ namespace Network {
 	} // TODO: Connect method, so the client can be reused
 
 
-	const std::string & NetworkClient::getIp() { return this->ipAddress; }
+	uint8_t NetworkClient::getIp() { return this->ipAddress; }
 }

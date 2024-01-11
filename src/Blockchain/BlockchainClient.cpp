@@ -13,7 +13,7 @@ namespace Blockchain {
 		this->networkClient = networkClient;
 		this->id = networkClient->getIp();
 
-		networkClient->AddPortHandler("8000", [this](Network::NetworkMessage & networkMessage) -> Network::NetworkMessage {
+		networkClient->AddPortHandler(8000, [this](Network::NetworkMessage & networkMessage) -> Network::NetworkMessage {
 			return this->MessageHandler(networkMessage);
 		});
 
@@ -27,7 +27,7 @@ namespace Blockchain {
 		std::cout << "Blockchain client established" << std::endl;
 	}
 
-	void BlockchainClient::MakeTransaction(std::string & receiverId, uint32_t amount) {
+	void BlockchainClient::MakeTransaction(uint8_t receiverId, uint32_t amount) {
 		Transaction transaction(this->id, receiverId, amount);
 		//TODO: Mechanism that sends the BlockchainTransactionTest to all connected peers
 	}
@@ -46,18 +46,17 @@ namespace Blockchain {
 	void BlockchainClient::DiscoverPeers(const std::vector<Address> & initialPeers) {
 		for (const Address & peerAddress: initialPeers) {
 			std::cout << "Blockchain Client " << this->id << " sent a message ";
-			Network::NetworkMessage response = networkClient->SendRequest(peerAddress, "8000",
-			                                                     R"(GET /connect {"node_id":")" + this->id + "\"}");
+			Network::NetworkMessage response = networkClient->SendRequest(peerAddress, 8000,
+			                                                     R"(GET /connect {"node_id":")" + std::to_string(this->id) + "\"}");
 			std::cout << response.Body() << std::endl;
 			if (DataParser::FetchMethod(response.Body()) == "200") {
-				std::string peerId = json::parse(DataParser::FetchContent(response.Body()))["node_id"];
+				uint8_t peerId = json::parse(DataParser::FetchContent(response.Body()))["node_id"];
 				if (peers[peerId].ip != peerAddress.ip) {
 					peers[peerId] = peerAddress;
 				}
 
-				Network::NetworkMessage discoveryResponse = networkClient->SendRequest(peerAddress, "8000",
-				                                                              R"(GET /discovery {"node_id":")" + this->id +
-				                                                              "\"}");
+				Network::NetworkMessage discoveryResponse = networkClient->SendRequest(peerAddress, 8000,
+				                                                              R"(GET /discovery {"node_id":)" + std::to_string(this->id) + "}");
 				std::cout << discoveryResponse.Body() << std::endl;
 			}
 			Utils::PrintMap(peers);
@@ -82,9 +81,9 @@ namespace Blockchain {
 
 	json BlockchainClient::ConnectEndpoint(Network::NetworkMessage & networkMessage) {
 		std::string method = DataParser::FetchMethod(networkMessage.Body());
-		std::cout << "Blockchain Client " << this->id << "/connect received a " << method << " message ";
+		std::cout << "Blockchain Client " + std::to_string(this->id) + "/connect received a " + method + " message ";
 		Address peerAddress = networkMessage.SenderAddress();
-		std::string peerId = json::parse(DataParser::FetchContent(networkMessage.Body()))["node_id"];
+		uint8_t peerId = json::parse(DataParser::FetchContent(networkMessage.Body()))["node_id"];
 		peers[peerId] = peerAddress;
 		return {{"node_id", this->id}};
 	}

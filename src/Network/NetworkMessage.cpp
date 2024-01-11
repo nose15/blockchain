@@ -7,13 +7,13 @@
 namespace Network {
 	NetworkMessage::NetworkMessage(uint32_t id, MessageType type, Address senderAddress, Address receiverAddress,
 	                               std::string body) : m_id(id), m_messageType(type),
-	                                                   m_senderAddress(std::move(senderAddress)),
-	                                                   m_receiverAddress(std::move(receiverAddress)),
+	                                                   m_senderAddress(senderAddress),
+	                                                   m_receiverAddress(receiverAddress),
 	                                                   m_body(std::move(body)) {
 	}
 
 	NetworkMessage::NetworkMessage(uint32_t id, Address senderAddress, Address receiverAddress, std::string body)
-			: m_id(id), m_senderAddress(std::move(senderAddress)), m_receiverAddress(std::move(receiverAddress)),
+			: m_id(id), m_senderAddress(senderAddress), m_receiverAddress(receiverAddress),
 			  m_body(std::move(body)) {
 		m_messageType = MessageType::Request;
 	}

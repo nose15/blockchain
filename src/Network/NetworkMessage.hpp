@@ -25,8 +25,8 @@ namespace Network {
 	class NetworkMessage {
 	protected:
 		uint32_t m_id = 0;
-		Address m_senderAddress = Address("0", "0");
-		Address m_receiverAddress = Address("0", "0");
+		Address m_senderAddress = Address(0, 0);
+		Address m_receiverAddress = Address(0, 0);
 		MessageType m_messageType = MessageType::Ping;
 		std::string m_body = " ";
 

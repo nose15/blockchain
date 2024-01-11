@@ -17,21 +17,21 @@ namespace Network {
 	class NetworkSim {
 	private:
 		NetworkMessage current_traffic;
-		std::map<std::string, std::function<void(NetworkMessage)>> connected;
-		std::stack<std::string> availableIps;
+		std::map<uint8_t, std::function<void(NetworkMessage)>> connected;
+		std::stack<uint8_t> availableIps;
 
 		void TriggerReceiver();
 
-		std::string acquireIp();
+		uint8_t acquireIp();
 
 	public:
 		NetworkSim();
 
 		void SendMessage(const NetworkMessage & networkMessage);
 
-		std::string connect(const std::function<void(NetworkMessage)> &);
+		uint8_t connect(const std::function<void(NetworkMessage)> &);
 
-		void disconnect(const std::string &);
+		void disconnect(uint8_t);
 	};
 }
 

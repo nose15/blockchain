@@ -17,7 +17,7 @@ namespace Router {
 	}
 
 	void Router::AddEndpoint(std::string path, std::function<json(Network::NetworkMessage &)> handler) {
-		m_endpoints.insert(std::pair<std::string, std::function<json(Network::NetworkMessage &)>>(path, handler));
+		m_endpoints.insert({path, handler});
 	}
 }
 

@@ -12,7 +12,7 @@
 namespace Blockchain {
 	class BlockchainClient;
 	class Mempool;
-	class Transaction;
+	struct Transaction;
 }
 
 #endif //BLOCKCHAIN_BLOCKCHAIN_HPP

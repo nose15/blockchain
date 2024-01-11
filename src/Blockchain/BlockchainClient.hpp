@@ -16,8 +16,8 @@ namespace Blockchain {
 
 	class BlockchainClient {
 	private:
-		std::string id;
-		std::map<std::string, Address> peers;
+		uint8_t id;
+		std::map<uint8_t, Address> peers;
 		std::shared_ptr<Network::NetworkClient> networkClient;
 		Router::Router router;
 
@@ -30,7 +30,7 @@ namespace Blockchain {
 
 		void DiscoverPeers(const std::vector<Address> & initialPeers);
 
-		void MakeTransaction(std::string & receiverId, uint32_t amount);
+		void MakeTransaction(uint8_t receiverId, uint32_t amount);
 
 		Network::NetworkMessage MessageHandler(Network::NetworkMessage &);
 	};

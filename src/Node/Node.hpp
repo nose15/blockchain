@@ -12,13 +12,13 @@
 namespace Node {
 	class Node {
 	private:
-		std::string id;
+		uint8_t id;
 		std::shared_ptr<Network::NetworkClient> networkClient;
 		std::unique_ptr<Blockchain::BlockchainClient> blockchainClient;
 	public:
-		Node(std::string, std::unique_ptr<Network::NetworkSim> network);
+		Node(uint8_t id, std::unique_ptr<Network::NetworkSim> network);
 
-		std::string getId();
+		uint8_t getId();
 
 		void Ping(const Address & receiverAddress);
 
@@ -26,7 +26,7 @@ namespace Node {
 
 		void BlockchainTest(const std::vector<Address> & initialPeers);
 
-		void BlockchainTransactionTest(std::string receiverId, uint32_t amount);
+		void BlockchainTransactionTest(uint8_t receiverId, uint32_t amount);
 	};
 }
 

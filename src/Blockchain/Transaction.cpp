@@ -5,11 +5,5 @@
 #include <Blockchain/Transaction.hpp>
 
 namespace Blockchain {
-	Transaction::Transaction(std::string & senderIp, std::string & receiverIp, uint32_t amount) : senderId(senderIp),
-	                                                                                              receiverId(receiverIp),
-	                                                                                              amount(amount) {}
-
-	std::string Transaction::to_string() {
-		return senderId + " " + receiverId + " " + std::to_string(amount);
-	}
+	Transaction::Transaction(uint8_t senderId, uint8_t receiverId, uint32_t amount) : senderId(senderId), receiverId(receiverId), amount(amount) {}
 }

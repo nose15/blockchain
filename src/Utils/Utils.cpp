@@ -39,9 +39,9 @@ namespace Utils {
 		return result;
 	}
 
-	void PrintMap(const std::map<std::string, Address> & peerMap) {
+	void PrintMap(const std::map<uint8_t, Address> & peerMap) {
 		for (const auto & pair: peerMap) {
-			std::cout << pair.first << " " << pair.second.ip << ":" << pair.second.port << "; ";
+			std::cout << std::to_string(pair.first) + " " + std::to_string(pair.second.ip) + ":" + std::to_string(pair.second.port) + "; ";
 		}
 
 		std::cout << std::endl;

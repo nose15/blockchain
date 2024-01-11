@@ -18,12 +18,12 @@
 namespace Network {
 	class NetworkClient {
 	protected:
-		std::string nodeId;
-		std::string ipAddress;
+		uint8_t nodeId;
+		uint8_t ipAddress;
 		std::vector<PendingRequest> pendingRequests;
 
 		std::unique_ptr<NetworkSim> network;
-		std::map<std::string, std::function<NetworkMessage(NetworkMessage &)>> portHandlers;
+		std::map<uint16_t, std::function<NetworkMessage(NetworkMessage &)>> portHandlers;
 		NetworkMessage currentResponse;
 
 		NetworkMessage && RequestHandler(NetworkMessage &);
@@ -31,19 +31,19 @@ namespace Network {
 		void ResponseHandler(NetworkMessage &);
 
 	public:
-		NetworkClient(std::string, std::unique_ptr<NetworkSim>);
+		NetworkClient(uint8_t nodeId, std::unique_ptr<NetworkSim> networkSim);
 
-		void AddPortHandler(const std::string & port, const std::function<NetworkMessage(NetworkMessage &)> &);
+		void AddPortHandler(uint16_t port, const std::function<NetworkMessage(NetworkMessage &)> &);
 
 		void MessageHandler(NetworkMessage &);
 
-		NetworkMessage SendRequest(const Address & receiverAddress, const std::string & responsePort, const std::string &);
+		NetworkMessage SendRequest(const Address & receiverAddress, uint16_t responsePort, const std::string &);
 
 		void BroadcastMessage(const std::string & message);
 
 		void disconnect();
 
-		const std::string & getIp();
+		uint8_t getIp();
 	};
 }
 

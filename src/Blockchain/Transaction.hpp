@@ -9,15 +9,11 @@
 #define BLOCKCHAIN_TRANSACTION_H
 
 namespace Blockchain {
-	class Transaction {
-	private:
-		int amount;
-		std::string senderId;
-		std::string receiverId;
-	public:
-		Transaction(std::string &, std::string &, uint32_t);
-
-		std::string to_string();
+	struct Transaction {
+		uint32_t amount;
+		uint8_t senderId;
+		uint8_t receiverId;
+		Transaction(uint8_t senderId, uint8_t receiverId, uint32_t amount);
 	};
 }
 
